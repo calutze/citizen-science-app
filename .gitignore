@@ -1,0 +1,10 @@
+venv/
+
+backend/.env
+
+*.pyc
+__pycache__/
+
+instance/
+
+migrations/
