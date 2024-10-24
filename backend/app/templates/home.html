@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Simulation</title>
+</head>
+<body>
+
+    <h1>Citizen Science App</h1>
+    <p>Backend and database demo.</p>
+    <a href="{{ url_for('auth.register_form') }}" class="btn">Register</a>
+    <br>
+    <a href="{{ url_for('auth.login_form') }}" class="btn">Login</a>
+    <br>
+    <a href="{{ url_for('auth.logout') }}" class="btn">Logout</a>
+    <br>
+    <a href="{{ url_for('admin.add_project_form') }}" class="btn">Add a Project</a>
+    <br>
+    <a href="{{ url_for('admin.show_user_projects') }}" class="btn">View projects for current user</a>
+</body>
+</html>
