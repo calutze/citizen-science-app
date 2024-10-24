@@ -8,3 +8,9 @@ __pycache__/
 instance/
 
 migrations/
+
+mobile-app/.expo
+mobile-app/node_modules
+
+# text editor setting
+.vscode
