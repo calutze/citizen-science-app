@@ -1,11 +1,9 @@
-import { Tabs } from 'expo-router';
+import { Stack, Tabs } from 'expo-router';
 import React from 'react';
 
 import { TabBarIcon } from '@/components/navigation/TabBarIcon';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
-import Login from './login';
-import ObservationForm from './ObservationForm';
 
 const sample_form_data = {form_id: 1,
   elements: [{'id': 1,
@@ -22,7 +20,7 @@ export default function TabLayout() {
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
+        headerShown: true,
       }}>
       <Tabs.Screen
         name="index"
@@ -51,9 +49,9 @@ export default function TabLayout() {
           ),
         }}/>
         <Tabs.Screen
-          name='ObservationForm'
+          name='form'
           options={{
-            title: 'Add',
+            title: 'New Observation',
             tabBarIcon: ({ color, focused }) => (
               <TabBarIcon name={focused ? 'add' : 'add-circle-outline'} color={color} />
             ),
