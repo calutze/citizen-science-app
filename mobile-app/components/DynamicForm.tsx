@@ -1,13 +1,37 @@
 import React, { useState } from 'react';
-import { View, ScrollView, StyleSheet, TextInput, Text } from 'react-native';
+import { View, ScrollView, StyleSheet, TextInput, Text, KeyboardTypeOptions } from 'react-native';
 import { Switch, Button, Checkbox, RadioButton, Title, Surface } from 'react-native-paper';
 import { Picker } from '@react-native-picker/picker';
 
-const DynamicForm = ({ formData, onSubmit }) => {
-  const [formValues, setFormValues] = useState({});
+interface FormElement {
+  id: string;
+  title: string;
+  type: string;
+  order: number;
+  options?: {
+    placeholder?: string;
+    keyboardType?: KeyboardTypeOptions;
+    secure?: boolean;
+    multiline?: boolean;
+    items?: { label: string; value: string }[];
+  };
+}
+
+interface FormData {
+  form_id: string;
+  elements: FormElement[];
+}
+
+interface DynamicFormProps {
+  formData: FormData;
+  onSubmit: (values: { [key: string]: any }) => void;
+}
+
+const DynamicForm: React.FC<DynamicFormProps> = ({ formData, onSubmit }) => {
+  const [formValues, setFormValues] = useState<{ [key: string]: any }>({});
 
   // Handle form value changes
-  const handleChange = (elementId, value) => {
+  const handleChange = (elementId: string, value: any) => {
     setFormValues(prev => ({
       ...prev,
       [elementId]: value
@@ -15,7 +39,7 @@ const DynamicForm = ({ formData, onSubmit }) => {
   };
 
   // Render different form elements based on type
-  const renderFormElement = (element) => {
+  const renderFormElement = (element: FormElement) => {
     const { id, title, type, options = {} } = element;
 
     switch (type) {
