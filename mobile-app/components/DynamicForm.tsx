@@ -105,6 +105,20 @@ const DynamicForm: React.FC<DynamicFormProps> = ({ formData, onSubmit }) => {
             </View>
         );
 
+      case 'RadioButton':
+        return (
+          <View style={styles.radioButtonContainer} key={id}>
+            <Text style={styles.label}>{title}</Text>
+            <RadioButton.Group onValueChange={newValue => handleChange(id, newValue)} value={formValues[id]}>
+              {options.items?.map(item => (
+                <View key={item.value}>
+                  <Text style={styles.radioLabel}>{item.label}<RadioButton value={item.value} /></Text>
+                </View>
+              ))}
+            </RadioButton.Group>
+          </View>
+        )
+
       default:
         return null;
     }
@@ -192,6 +206,13 @@ const styles = StyleSheet.create({
   },
   checkboxLabel: {
     fontSize: 16,
+  },
+  radioButtonContainer: {
+    justifyContent: 'center',
+  },
+  radioLabel: {
+    fontSize: 14,
+    justifyContent: 'center'
   },
   submitButton: {
     backgroundColor: '#007AFF',

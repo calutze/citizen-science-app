@@ -26,7 +26,7 @@ export default function FormScreen() {
       },
       {
         id: 3,
-        title: 'Notifications',
+        title: 'Switch',
         type: 'Switch',
         order: 3
       },
@@ -71,6 +71,19 @@ export default function FormScreen() {
         },
         order: 8
       },
+      {
+        id: 9,
+        title: 'Radio Buttons Group',
+        type: 'RadioButton',
+        options: {
+          items: [
+            { label: 'Option 1', value: 'option1' },
+            { label: 'Option 2', value: 'option2' },
+            { label: 'Option 3', value: 'option3' }
+          ]
+        },
+        order: 9
+      }
     ]
   };
 
