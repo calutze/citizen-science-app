@@ -4,7 +4,7 @@ import { Switch, Button, Checkbox, RadioButton, Title, Surface } from 'react-nat
 import { Picker } from '@react-native-picker/picker';
 
 interface FormElement {
-  id: string;
+  id: number;
   title: string;
   type: string;
   order: number;
@@ -18,7 +18,7 @@ interface FormElement {
 }
 
 interface FormData {
-  form_id: string;
+  form_id: number;
   elements: FormElement[];
 }
 
@@ -31,7 +31,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({ formData, onSubmit }) => {
   const [formValues, setFormValues] = useState<{ [key: string]: any }>({});
 
   // Handle form value changes
-  const handleChange = (elementId: string, value: any) => {
+  const handleChange = (elementId: number, value: any) => {
     setFormValues(prev => ({
       ...prev,
       [elementId]: value

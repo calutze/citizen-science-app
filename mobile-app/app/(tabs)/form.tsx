@@ -1,4 +1,4 @@
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, KeyboardTypeOptions } from 'react-native';
 import DynamicForm from '@/components/DynamicForm';
 
 export default function FormScreen() {
@@ -67,7 +67,7 @@ export default function FormScreen() {
         type: 'TextInput',
         options: {
           placeholder: 'Enter your email',
-          keyboardType: 'email-address'
+          keyboardType: 'email-address' as KeyboardTypeOptions
         },
         order: 8
       },
