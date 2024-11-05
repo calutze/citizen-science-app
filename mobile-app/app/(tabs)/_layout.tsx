@@ -1,9 +1,17 @@
-import { Tabs } from 'expo-router';
+import { Stack, Tabs } from 'expo-router';
 import React from 'react';
 
 import { TabBarIcon } from '@/components/navigation/TabBarIcon';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
+
+const sample_form_data = {form_id: 1,
+  elements: [{'id': 1,
+  'title': 'Text Input',
+  'type': 'TextInput',
+  'options': {placeholder: 'Enter your text here'},
+  'order': 1}]
+}
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
@@ -12,7 +20,7 @@ export default function TabLayout() {
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
+        headerShown: true,
       }}>
       <Tabs.Screen
         name="index"
@@ -26,12 +34,28 @@ export default function TabLayout() {
       <Tabs.Screen
         name="explore"
         options={{
-          title: 'Explore',
+          title: 'Observations',
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />
+            <TabBarIcon name={focused ? 'document' : 'document-text-outline'} color={color} />
           ),
         }}
       />
+      <Tabs.Screen
+        name='login'
+        options={{
+          title: 'Login',
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon name={focused ? 'person' : 'person-outline'} color={color} />
+          ),
+        }}/>
+        <Tabs.Screen
+          name='form'
+          options={{
+            title: 'New Observation',
+            tabBarIcon: ({ color, focused }) => (
+              <TabBarIcon name={focused ? 'add' : 'add-circle-outline'} color={color} />
+            ),
+          }}/>
     </Tabs>
   );
 }
