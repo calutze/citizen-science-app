@@ -1,8 +1,10 @@
 'use client';
 
 import { useState } from 'react'
+import Link from 'next/link'
 
 export default function Page() {
+    // this component is the user login page
     const [email, setEmail] = useState("Email");
     const [password, setPassword] = useState("");
 
@@ -12,6 +14,7 @@ export default function Page() {
             email: email,
             password: password
         }
+        // put call to the server here
         console.log(userData)
     }
 
@@ -27,6 +30,7 @@ export default function Page() {
             </label>
             <input type="submit"></input>
         </form>
+        <Link href="/login/register">Not a member? Register here!</Link>
     </div>
     )
 }
