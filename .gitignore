@@ -9,8 +9,11 @@ instance/
 
 migrations/
 
-templates/
-
 testing_routes/
 
 *.gitignore
+mobile-app/.expo
+mobile-app/node_modules
+
+# text editor setting
+.vscode
