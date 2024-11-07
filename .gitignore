@@ -9,6 +9,9 @@ instance/
 
 migrations/
 
+testing_routes/
+
+*.gitignore
 mobile-app/.expo
 mobile-app/node_modules
 
