@@ -24,9 +24,28 @@ class Observation(db.Model):
         nullable=False
     )
 
+    observation_values = db.relationship(
+        'ObservationValue',
+        backref='parent_observation',
+        cascade='all, delete'
+    )
+
     def get_id(self):
         """ Gets observation id. """
         return self.observation_id
+
+    def to_dict(self):
+        """ Converts observation and related values to dictionary format. """
+        return {
+            'observation_id': self.observation_id,
+            'created_at': self.created_at.isoformat() if self.created_at else None,
+            'student_identifier': self.student_identifier,
+            'image_url': self.image_url,
+            'project_id': self.project,
+            'observation_values': [
+                value.to_dict() for value in self.observation_values
+            ]
+        }
 
 
 class ObservationValue(db.Model):
@@ -55,3 +74,11 @@ class ObservationValue(db.Model):
     def get_id(self):
         """ Gets observation value id. """
         return self.observation_value_id
+
+    def to_dict(self):
+        """ Converts the observation value to dictionary format. """
+        return {
+            'observation_value_id': self.observation_value_id,
+            'value': self.value,
+            'field': self.field
+        }

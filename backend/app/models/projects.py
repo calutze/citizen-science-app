@@ -29,3 +29,15 @@ class Project(db.Model):
     def get_id(self):
         """ Gets project id. """
         return self.project_id
+
+    def to_dict(self):
+        """ Converts project attributes to a dictionary. """
+        return {
+            'project_id': self.project_id,
+            'created_at': self.created_at.isoformat() if self.created_at else None,
+            'project_code': self.project_code,
+            'title': self.title,
+            'description': self.description,
+            'instructions': self.instructions,
+            'created_by': self.created_by
+        }

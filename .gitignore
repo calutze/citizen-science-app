@@ -8,3 +8,9 @@ __pycache__/
 instance/
 
 migrations/
+
+templates/
+
+testing_routes/
+
+*.gitignore
