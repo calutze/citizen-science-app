@@ -1,4 +1,4 @@
-import { Image, StyleSheet, TextInput } from "react-native";
+import { Image, StyleSheet, Text, TextInput } from "react-native";
 import { View } from "react-native";
 import { useState } from "react";
 
@@ -6,9 +6,8 @@ export default function HomeScreen() {
   const [projectCode, onChangeProjectCode] = useState("");
   return (
     <View style={[styles.homeContainer]}>
-      <header style={styles.header}>Citizen Science App</header>
-      <main style={styles.main}>
-        Student Project Code:
+      <Text style={styles.header}>Citizen Science App</Text>
+        <Text>Student Project Code:</Text>
         <TextInput
           style={styles.input}
           onChangeText={onChangeProjectCode}
@@ -20,7 +19,6 @@ export default function HomeScreen() {
           style={styles.image}
           source={require("@/assets/images/science-image.webp")}
         />
-      </main>
     </View>
   );
 }
