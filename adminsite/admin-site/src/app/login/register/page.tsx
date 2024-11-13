@@ -46,7 +46,7 @@ export default function Register() {
                 School &#40;optional&#41;:
                 <input type="text" name="school" value={registerData.school} onChange={(e) => setRegisterData({...registerData, school: e.target.value})} />
             </label>
-            <input type="submit" />
+            <input className="submitButton" type="submit" />
         </form>
     </div>
     )

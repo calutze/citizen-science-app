@@ -1,5 +1,7 @@
 'use client';
 
+import Link from 'next/link';
+
 // dummy projects until it gets connected to the database
 let dummyProjects = [
     {
@@ -19,10 +21,14 @@ let dummyProjects = [
 export default function Page() {
     // this component is the users account page. will eventually have functionality to click a make new project button, explore current projects, and look at observations.
     let project_list = dummyProjects
-    
+
     function getList() {
         // TODO: call backend and get the list of projects from the user
     }
+
+    try {
+        localStorage.setItem("projects", JSON.stringify(project_list))
+    } catch (error) {}
 
     return (
     <div className="accountPage">
@@ -32,8 +38,12 @@ export default function Page() {
                 <p>{project.title}</p>
                 <p>Project code: {project.project_code}</p>
                 <p>{project.description}</p>
-                {/* TODO: Change onclick functionality to go to the project screen when the project screen gets made */}
-                <button onClick={() => {console.log(project.project_code)}}>Edit</button>
+                <Link href={{
+                    pathname: '/account/project',
+                    query: {
+                        index: index.toString()
+                    }
+                }}>Edit Project</Link>
             </div>)
         })}
     </div>

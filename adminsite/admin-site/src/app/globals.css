@@ -24,15 +24,36 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
+.landingPage {
+  --gray-rgb: 0, 0, 0;
+  --gray-alpha-200: rgba(var(--gray-rgb), 0.08);
+  --gray-alpha-100: rgba(var(--gray-rgb), 0.05);
+
+  --button-primary-hover: #383838;
+  --button-secondary-hover: #f2f2f2;
+
+  display: grid;
+  grid-template-rows: 10px 10px;
+  align-items: center;
+  justify-items: center;
+  padding: 80px;
+  gap: 64px;
+  font-family: var(--font-geist-sans);
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+form {
+  display: grid;
+  width: 25%;
+  margin: auto;
+  padding: 10px;
+}
+
+form input {
+  margin: 5px;
+}
+
+form .submitButton {
+  padding: 7px;
 }
 
 @media (prefers-color-scheme: dark) {

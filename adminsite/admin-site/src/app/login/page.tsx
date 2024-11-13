@@ -28,9 +28,9 @@ export default function Page() {
                 Password:
                 <input type="password" value={password} onChange={(e) => setPassword(e.target.value)}></input>
             </label>
-            <input type="submit"></input>
+            <input className="submitButton" type="submit"></input>
+            <Link href="/login/register">Not a member? Register here!</Link>
         </form>
-        <Link href="/login/register">Not a member? Register here!</Link>
     </div>
     )
 }
