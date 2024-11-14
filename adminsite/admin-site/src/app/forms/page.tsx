@@ -22,12 +22,28 @@ interface FormElement {
 }
 
 export default function Page() {
-  const [formFields, setFormFields] = useState([]);
+  const [formFields, setFormFields] = useState<FormElement[]>([]);
   const [formTitle, setFormTitle] = useState('');
   const [formJSON, setFormJSON] = useState('');
 
+  function addField() {
+    setFormFields([
+      ...formFields,
+      {
+        id: formFields.length + 1,
+        title: `Field ${formFields.length + 1}`,
+        type: 'TextInput',
+        order: formFields.length + 1,
+        options: {
+          placeholder: 'Enter text here',
+        }
+      }
+    ]);
+  }
+
   function generateJSON() {
     const template = {
+      form_id: 1, //need to get this id from the backend?
       form_title: formTitle,
       elements: formFields.map(field => ({
         ...field,
@@ -36,6 +52,7 @@ export default function Page() {
     setFormJSON(JSON.stringify(template, null, 2));
     console.log(formJSON);
   }
+
   return (
     <div className="form-builder">
       <h1>Form Builder</h1>
@@ -48,6 +65,7 @@ export default function Page() {
           placeholder="Enter Form Title"
           />
       </div>
+      <button onClick={addField}>Add Field</button>
       <button 
         onClick={generateJSON}
         className="btn btn-primary"
