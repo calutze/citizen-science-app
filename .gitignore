@@ -11,6 +11,5 @@ migrations/
 
 templates/
 
-testing_routes/
 
 *.gitignore

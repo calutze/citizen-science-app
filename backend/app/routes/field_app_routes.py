@@ -1,26 +1,25 @@
-# field app routes
+"""
+Defines routes for interacting with project sessions in the field
+app, where users can enter project codes, check for active sessions,
+and clear existing sessions. These routes are primarily
+used by field users to retrieve observations and interact with
+project data without login requirements.
+"""
+
 
 from flask import Blueprint, request, session, jsonify
 from app.models.projects import Project
-from app.models.observations import Observation
-
-from flask import render_template,  url_for, redirect
 
 
 field_app = Blueprint('field_app', __name__)
 
 
-@field_app.route('/enter-code')
-def enter_code_entry():
-    return render_template('enter_code.html')
-
-
-@field_app.route('/enter-code', methods=['GET', 'POST'])
+@field_app.route('/enter-code', methods=['POST'])
 def enter_code():
     """ Gets project associated with project code,
-        sets session, and redirects to show observations. """
+        sets session, returns the project_id. """
 
-    code = request.form.get('code')
+    code = request.json.get('code')
     project = Project.query.filter_by(project_code=code).first()
 
     if not project:
@@ -30,49 +29,23 @@ def enter_code():
     session.permanent = True
     session['project_id'] = project.project_id
 
-    # redirect to show observations
-    return redirect(url_for('field_app.show_observations'))
+    return jsonify({"success": True, "message": "Project code accepted", "project_id": project.project_id})
 
 
-@field_app.route('/show-observations')
-def show_observations():
-    """ Displays observations for the project stored in session."""
-
+@field_app.route('/check-session', methods=['GET'])
+def check_session():
+    """ Checks if there is an active project session and returns project ID. """
     project_id = session.get('project_id')
 
     if not project_id:
-        # redirect home if no active session or project ID
-        return 'No session Found'
+        return jsonify({"session_active": False, "message": "No active session"}), 200
 
-    project = Project.query.get(project_id)
-    if not project:
-        return jsonify({"error": "Project not found"}), 404
-
-    observations = Observation.query.filter_by(project=project_id).all()
-    response_data = {
-        'project': project.to_dict(),
-        'observations': [
-            {
-                **obs.to_dict(),
-                'values': [val.to_dict() for val in obs.observation_values]
-            } for obs in observations
-        ]
-    }
-
-    return render_template('project_observations.html', data=response_data)
+    return jsonify({"session_active": True, "project_id": project_id}), 200
 
 
-# test route TODO delete
-@field_app.route('/check-session')
-def check_session():
-    project_id = session.get('project_id')
-    if project_id:
-        return f"Session is active. Project ID: {project_id}"
-    else:
-        return "No active session or project ID not found in session."
-
-
-@field_app.route('/clear-session')
+@field_app.route('/clear-session', methods=['GET'])
 def clear_session():
+    """ Clears the current session and returns a JSON confirmation. """
     session.clear()
-    return redirect(url_for('home'))
+
+    return jsonify({"success": True, "message": "Session cleared"}), 200
