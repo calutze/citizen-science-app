@@ -27,6 +27,13 @@ export default function Page() {
   const [formTitle, setFormTitle] = useState('');
   const [formJSON, setFormJSON] = useState('');
 
+  const fieldTypes = [
+    'text',
+    'select',
+    'radio',
+    'checkbox',
+
+  ]
   function addField() {
     setFormFields([
       ...formFields,
@@ -67,7 +74,37 @@ export default function Page() {
           />
       </div>
       {formFields.map((field, index) => (
-        <div></div>
+        <div key={field.id}>
+          {/*Title, move and delete buttons*/}
+          <h3>Field {index + 1}</h3>
+          <button><MoveUp /></button>
+          <button><MoveDown /></button>
+          <button><Trash2 /></button>
+          {/*Type of field*/}
+          <div>
+            <label>Type</label>
+            <select
+              value={field.type}>
+                {fieldTypes.map(type => (
+                  <option key={type} value={type}>{type}</option>
+                ))}
+            </select>
+          </div>
+          {/*Field Title*/}
+          <div>
+            <label>Label</label>
+            <input 
+              value={field.title}
+              placeholder="Field label"/>
+          </div>
+          {/*Field Placeholder*/}
+          <div>
+            <label>Placeholder</label>
+            <input 
+              value={field.options?.placeholder || ''}
+              placeholder="Field placeholder"/>
+          </div>
+        </div>
       ))}
       <button onClick={addField}>
         <Plus />Add Field</button>
