@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from "react";
+import { Trash2, Plus, MoveUp, MoveDown } from 'lucide-react';
 
 interface FormField {
   form_id: number;
@@ -65,7 +66,11 @@ export default function Page() {
           placeholder="Enter Form Title"
           />
       </div>
-      <button onClick={addField}>Add Field</button>
+      {formFields.map((field, index) => (
+        <div></div>
+      ))}
+      <button onClick={addField}>
+        <Plus />Add Field</button>
       <button 
         onClick={generateJSON}
         className="btn btn-primary"
