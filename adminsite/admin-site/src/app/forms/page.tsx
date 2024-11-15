@@ -18,7 +18,7 @@ interface FormElement {
     //keyboardType?: boolean;
     secure?: boolean;
     multiline?: boolean;
-    items?: { label: string; value: string }[];
+    items?: [];
   };
 }
 
@@ -44,6 +44,7 @@ export default function Page() {
         order: formFields.length + 1,
         options: {
           placeholder: 'Enter text here',
+          items: []
         }
       }
     ]);
@@ -104,6 +105,14 @@ export default function Page() {
               value={field.options?.placeholder || ''}
               placeholder="Field placeholder"/>
           </div>
+          {/*Options for Select, Radio, Checkbox, only displays if those types*/}
+          {(field.type === 'select' || field.type === 'radio' || field.type === 'checkbox') && (
+          <div>
+            <label>Options (comma-separated)</label>
+            <input 
+              value={field.options?.items?.join(', ') || ''}
+              placeholder="Option 1, Option 2, Option 3"/>
+          </div>)}
         </div>
       ))}
       <button onClick={addField}>
