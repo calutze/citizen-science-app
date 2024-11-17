@@ -95,21 +95,21 @@ def add_observation():
 
 @observation.route('/observation/<int:observation_id>', methods=['GET'])
 def get_observation(observation_id):
-    """Retrieves observation details by observation_id."""
+    """ Retrieves observation details by observation_id. """
     obs = validate_observation(observation_id)
     return jsonify(obs.to_dict()), 200
 
 
 @observation.route('/update-observation/<int:observation_id>', methods=['PUT'])
 def update_observation(observation_id):
-    """Updates observation details by observation_id."""
+    """ Updates observation details by observation_id. """
     obs = validate_observation(observation_id)
     data = request.get_json()
 
     obs.student_identifier = data.get('student_identifier', obs.student_identifier)
     obs.image_url = data.get('image_url', obs.image_url)
 
-    # Update observation values if provided
+    # update observation values if provided
     observation_values_data = data.get('observation_values', [])
     for value_data in observation_values_data:
         obs_value = db.session.get(ObservationValue, value_data.get('observation_value_id'))
@@ -128,7 +128,7 @@ def update_observation(observation_id):
 
 @observation.route('/delete-observation/<int:observation_id>', methods=['DELETE'])
 def delete_observation(observation_id):
-    """Deletes an observation by observation_id."""
+    """ Deletes an observation by observation_id. """
     obs = validate_observation(observation_id)
 
     try:
