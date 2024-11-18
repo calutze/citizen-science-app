@@ -4,26 +4,27 @@ import React, { useState } from "react";
 import { Trash2, Plus, MoveUp, MoveDown } from 'lucide-react';
 
 interface FormField {
-  form_id: number;
-  form_title: string;
-  elements: FormElement[];
+  field_id: number;
+  field_title: string;
+  field_type: string;
+  field_description: string;
+  field_order: number;
+  is_required: boolean;
+  form: number;
+  field_options: string[];
 }
-interface FormElement {
-  id: number;
-  title: string;
-  type: string;
-  order: number;
-  placeholder?: string;
-  options?: {
-    //keyboardType?: boolean;
-    secure?: boolean;
-    multiline?: boolean;
-    items?: [];
-  };
+
+interface FormData {
+  form_id: number;
+  created_at: string;
+  description: string;
+  created_by: string;
+  project_id: number;
+  fields: FormField[];
 }
 
 export default function Page() {
-  const [formFields, setFormFields] = useState<FormElement[]>([]);
+  const [formFields, setFormFields] = useState<FormField[]>([]);
   const [formTitle, setFormTitle] = useState('');
   const [formJSON, setFormJSON] = useState('');
 
@@ -32,20 +33,20 @@ export default function Page() {
     'select',
     'radio',
     'checkbox',
-
   ]
+
   function addField() {
     setFormFields([
       ...formFields,
       {
-        id: formFields.length + 1,
-        title: `Field ${formFields.length + 1}`,
-        type: 'TextInput',
-        order: formFields.length + 1,
-        placeholder: '',
-        options: {
-          items: []
-        }
+        field_id: formFields.length + 1,
+        field_title: `Field ${formFields.length + 1}`,
+        field_type: 'TextInput',
+        field_order: formFields.length + 1,
+        field_description: '',
+        field_options: [],
+        is_required: false,
+        form: 0, // TODO get the current form number from backend
       }
     ]);
   }
@@ -77,7 +78,7 @@ export default function Page() {
 
   function generateJSON() {
     const template = {
-      form_id: 1, //need to get this id from the backend?
+      form_id: 1, //TODO need to get this id from the backend?
       form_title: formTitle,
       elements: formFields.map(field => ({
         ...field,
@@ -100,7 +101,7 @@ export default function Page() {
           />
       </div>
       {formFields.map((field, index) => (
-        <div key={field.id}>
+        <div key={field.field_id}>
           {/*Title, move and delete buttons*/}
           <h3>Field {index + 1}</h3>
           <button onClick={() => moveField(index, 'up')}>
@@ -113,8 +114,8 @@ export default function Page() {
           <div>
             <label>Type</label>
             <select
-              value={field.type}
-              onChange={(e) => updateField(index, 'type', e.target.value)}>
+              value={field.field_type}
+              onChange={(e) => updateField(index, 'field_type', e.target.value)}>
                 {fieldTypes.map(type => (
                   <option key={type} value={type}>{type}</option>
                 ))}
@@ -124,26 +125,33 @@ export default function Page() {
           <div>
             <label>Label</label>
             <input 
-              value={field.title}
+              value={field.field_title}
               placeholder="Field label"
-              onChange={(e) => updateField(index, 'title', e.target.value)}/>
+              onChange={(e) => updateField(index, 'field_title', e.target.value)}/>
           </div>
           {/*Field Placeholder*/}
           <div>
             <label>Placeholder</label>
             <input 
-              value={field.placeholder}
+              value={field.field_description}
               placeholder="Field placeholder"
-              onChange={(e) => updateField(index, 'placeholder', e.target.value)}/>
+              onChange={(e) => updateField(index, 'field_description', e.target.value)}/>
+          </div>
+          <div>
+            <label>Required</label>
+            <input 
+              type="checkbox"
+              checked={field.is_required}
+              onChange={(e) => updateField(index, 'is_required', e.target.checked)}/>
           </div>
           {/*Options for Select, Radio, Checkbox, only displays if those types*/}
-          {(field.type === 'select' || field.type === 'radio' || field.type === 'checkbox') && (
+          {(field.field_type === 'select' || field.field_type === 'radio' || field.field_type === 'checkbox') && (
           <div>
             <label>Options (comma-separated)</label>
             <input 
-              value={field.options?.items?.join(', ') || ''}
+              value={field.field_options?.join(', ') || ''}
               placeholder="Option 1, Option 2, Option 3"
-              onChange={(e) => updateField(index, 'options', e.target.value.split(', ').map(opt => opt.trim()))}/>
+              onChange={(e) => updateField(index, 'field_options', e.target.value.split(', '))}/>
           </div>)}
         </div>
       ))}
