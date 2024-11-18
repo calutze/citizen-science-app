@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { Trash2, Plus, MoveUp, MoveDown } from 'lucide-react';
 
+// Type definition for FormField, matches backend Model
 interface FormField {
   field_id: number;
   field_title: string;
@@ -14,7 +15,8 @@ interface FormField {
   field_options: string[];
 }
 
-interface FormData {
+// Type defintion for FromTemplate, matches backend Model
+interface FormTemplate {
   form_id: number;
   created_at?: string;
   description: string;
@@ -51,9 +53,9 @@ export default function Page() {
     ]);
   }
 
-  function updateField(index: number, key: string, value: any) {
+  function updateField(index: number, key: keyof FormField, value: FormField[keyof FormField]) {
     const newFields = [...formFields];
-    newFields[index][key] = value;
+    newFields[index] = { ...newFields[index], [key]: value };
     setFormFields(newFields);
   }
 
@@ -77,7 +79,7 @@ export default function Page() {
   };
 
   function generateJSON() {
-    const template: FormData = {
+    const template: FormTemplate = {
       form_id: 1, //TODO need to get this id from the backend?
       description: formTitle,
       fields: formFields
