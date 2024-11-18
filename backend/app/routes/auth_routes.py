@@ -1,4 +1,14 @@
-from flask import Blueprint, request, jsonify
+"""
+Defines authentication and user management routes for registration,
+login, logout, and CRUD operations on user data.
+
+Each route returns JSON responses and includes error handling.
+Passwords are hashed for security, and Flask-Login is used
+to manage session states.
+"""
+
+
+from flask import Blueprint, request, jsonify, abort
 from flask_login import login_user, login_required, logout_user
 from app import bcrypt, db
 from app.models.users import User
@@ -7,9 +17,9 @@ from app.models.users import User
 auth = Blueprint('auth', __name__)
 
 
-@auth.route('/register', methods=['GET', 'POST'])
+@auth.route('/register', methods=['POST'])
 def handle_registration():
-    """ Handles registration and login of a new user. """
+    """ Registers a new user with provided details. """
     data = request.get_json()
     username = data.get('username')
     password = data.get('password')
@@ -18,10 +28,14 @@ def handle_registration():
     last_name = data.get('last_name')
     school = data.get('school')
 
+    # verifies all required data is present in request
+    if not all([username, password, email, first_name, last_name, school]):
+        abort(400)
+
     user = User.query.filter((User.username == username)).first()
 
     if user:
-        return jsonify({'error': 'User already exits.'}), 409
+        abort(409)
 
     # hash password and creates new user
     password_hash = bcrypt.generate_password_hash(password).decode('utf-8')
@@ -38,40 +52,35 @@ def handle_registration():
         db.session.add(user)
         db.session.commit()
         login_user(user)
+        return jsonify({"success": True, "message": "Registration successful"}), 201
 
-        return jsonify({
-            'success': True,
-            'message': 'Registration successful'
-            }), 201
-
-    except Exception as e:
+    except Exception:
         db.session.rollback()
-        return jsonify({'error': str(e)}), 500
+        abort(500)
 
 
-@auth.route('/login', methods=['GET', 'POST'])
+@auth.route('/login', methods=['POST'])
 def handle_login():
-    """ Handles admin login. """
+    """ Logs in an existing user if credentials are valid. """
     data = request.get_json()
     username = data.get('username')
     password = data.get('password')
 
     if not username or not password:
-        return jsonify({'error': 'Username and password are required'}), 400
+        abort(400)
 
     user = User.query.filter(User.username == username).first()
 
-    # verifies user and login credientials, logs in user
+    # verifies credientials, logs in user
     if user and bcrypt.check_password_hash(user.password_hash, password):
         login_user(user)
 
-        # return object TBD after FE integration
         return jsonify({'success': True, 'message': 'Login successful'}), 200
 
-    return jsonify({'error': 'Invalid username or password'}), 401
+    abort(401)
 
 
-@auth.route('/logout', methods=['GET', 'POST'])
+@auth.route('/logout', methods=['POST'])
 @login_required
 def logout():
     """ Logs out current user. """
@@ -83,30 +92,30 @@ def logout():
 @login_required
 def get_user_info(user_id):
     """ Gets user information based on user_id. """
-    user = db.session.get(user_id)
+    user = User.query.get(user_id)
 
     if not user:
-        return jsonify({'error': 'User not found'}), 404
+        abort(404)
 
     user_info = {
         'user_id': user.user_id,
         'username': user.username,
         'email': user.email,
-        'first_name': user.first_email,
+        'first_name': user.first_name,
         'last_name': user.last_name,
         'school': user.school
     }
     return jsonify(user_info), 200
 
 
-@auth.route('/user/<int:user_id>', methods=['PUT'])
+@auth.route('/update-user/<int:user_id>', methods=['PUT'])
 @login_required
 def update_user(user_id):
-    """ Updates user info. """
-    user = db.session.get(user_id)
+    """ Updates user information by user id. """
+    user = User.query.get(user_id)
 
     if not user:
-        return jsonify({'error': 'User not found'}), 404
+        abort(404)
 
     data = request.get_json()
     user.email = data.get('email', user.email)
@@ -118,25 +127,25 @@ def update_user(user_id):
         db.session.commit()
         return jsonify({'success': True, 'message': "User updated"}), 200
 
-    except Exception as e:
+    except Exception:
         db.session.rollback()
-        return jsonify({'error': str(e)}), 500
+        abort(500)
 
 
-@auth.route('/user/<int:user_id>', methods=['DELETE'])
+@auth.route('/delete-user/<int:user_id>', methods=['DELETE'])
 @login_required
 def delete_user(user_id):
     """ Deletes user account based on user_id. """
-    user = db.session.get(user_id)
+    user = User.query.get(user_id)
 
     if not user:
-        return jsonify({'error': 'User not found'}), 404
+        abort(404)
 
     try:
         db.session.delete(user)
         db.session.commit()
         return jsonify({'success': True, 'message': "User deleted"}), 200
 
-    except Exception as e:
+    except Exception:
         db.session.rollback()
-        return jsonify({'error': str(e)}), 500
+        abort(500)
