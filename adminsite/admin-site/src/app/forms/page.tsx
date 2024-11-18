@@ -16,10 +16,10 @@ interface FormField {
 
 interface FormData {
   form_id: number;
-  created_at: string;
+  created_at?: string;
   description: string;
-  created_by: string;
-  project_id: number;
+  created_by?: string;
+  project_id?: number;
   fields: FormField[];
 }
 
@@ -77,12 +77,10 @@ export default function Page() {
   };
 
   function generateJSON() {
-    const template = {
+    const template: FormData = {
       form_id: 1, //TODO need to get this id from the backend?
-      form_title: formTitle,
-      elements: formFields.map(field => ({
-        ...field,
-      }))
+      description: formTitle,
+      fields: formFields
     }
     setFormJSON(JSON.stringify(template, null, 2));
     console.log(formJSON);
