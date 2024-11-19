@@ -1,14 +1,25 @@
-import Image from "next/image";
 import styles from "./page.module.css";
-import Link from 'next/link'
+import Link from 'next/link';
 
 export default function Home() {
   // this component is the base page/landing page
   return (
-    <div className={styles.page}>
-      <Link href="/login">Login Page</Link>
-      <Link href="/account">Accounts Page</Link>
-      <p>this will eventually be the landing page</p>
+    <div className="landingPage">
+      <h1 className="websiteHeader">Citizen Science App</h1>
+      <h2>Hello welcome to the teacher site for the citizen science app!</h2>
+      <h3>From this website you can:</h3>
+      <ul>
+        <li>Create a new project</li>
+        <li>Create observation forms</li>
+        <li>View different projects you've created</li>
+        <li>See the data visualized into a singular place</li>
+      </ul>
+      <div className="loginBox">
+        <p>Already a member?</p>
+        <Link href="/login">Login Here!</Link>
+        <p>Looking to get started?</p>
+        <Link href="/login/register">Register Here!</Link>
+      </div>
     </div>
   );
 }

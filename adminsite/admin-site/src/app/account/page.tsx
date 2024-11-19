@@ -16,26 +16,92 @@ let dummyProjects = [
     }
 ]
 
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react'
+
 export default function Page() {
     // this component is the users account page. will eventually have functionality to click a make new project button, explore current projects, and look at observations.
-    let project_list = dummyProjects
-    
-    function getList() {
-        // TODO: call backend and get the list of projects from the user
+    const router = useRouter()
+
+    function makeCard(project: any) {
+        // make the project cards
+        let projectCard = document.createElement('div')
+        projectCard.className = 'projectCard'
+
+        // create elements
+        let projectTitle = document.createElement('p')
+        let projectCode = document.createElement('p')
+        let projectDesc = document.createElement('p')
+        let projectButton = document.createElement('button')
+
+        // give them classes
+        projectTitle.className = 'projectTitle'
+        projectCode.className = 'projectCode'
+        projectDesc.className = 'projectDesc'
+        projectButton.className = 'projectButton'
+
+        // put information in elements
+        projectTitle.innerText = project.title
+        projectCode.innerText = "Project code: " + project.project_code
+        projectDesc.innerText = project.description
+        projectButton.innerText = "Edit Project"
+        projectButton.onclick = () => {router.push('/account/project?project_id='+project.project_id)}
+
+        // append all info to card
+        projectCard.appendChild(projectTitle)
+        projectCard.appendChild(projectCode)
+        projectCard.appendChild(projectDesc)
+        projectCard.appendChild(projectButton)
+
+        // return card
+        return projectCard
     }
+
+    async function getList() {
+        // make the request
+        const listHeader = new Headers();
+        listHeader.append("Content-Type", "application/json");
+
+        let listRequest = new Request('https://capstone-deploy-production.up.railway.app/user-projects', {
+            method: "GET",
+            credentials: "include",
+            headers: listHeader
+        })
+
+        // call the server for the project list
+        try {
+            let listResponse = await fetch(listRequest)
+            if (!listResponse.ok) {
+                throw new Error(`Response status: ${listResponse.status}`)
+            } else {
+                let listOfProjects = await listResponse.json() // put the json object here.
+                let divToAppend = document.getElementById('projectList')
+                // if the length exists run through the array and put each of them in the make card function then append them to the project list div
+                if (listOfProjects && divToAppend) {
+                    divToAppend.innerHTML = ""
+                    for (const project in listOfProjects) {
+                        let projectCard = makeCard(listOfProjects[project])
+                        divToAppend.append(projectCard)
+                    }
+                }
+                // else print some kind of no current project message
+            }
+        } catch (error: any) {
+            console.error(error.message)
+        }
+    }
+
+    useEffect(() => {getList()})
 
     return (
     <div className="accountPage">
+        <p>Projects</p>
+        <Link href="/account/create">Create a new project</Link>
         <p>Project List</p>
-        {project_list.map(function(project, index){
-            return (<div className="projectCard">
-                <p>{project.title}</p>
-                <p>Project code: {project.project_code}</p>
-                <p>{project.description}</p>
-                {/* TODO: Change onclick functionality to go to the project screen when the project screen gets made */}
-                <button onClick={() => {console.log(project.project_code)}}>Edit</button>
-            </div>)
-        })}
+        <div className="projectList" id="projectList">
+
+        </div>
     </div>
     )
 }
