@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 
 export default function Register() {
     // This component is the registration form for new users
@@ -8,15 +9,38 @@ export default function Register() {
         username: "username",
         password: "password",
         email: "email@email.com",
-        firstName: "",
-        lastName: "",
+        first_name: "",
+        last_name: "",
         school: ""
     })
 
-    function handleSubmit(event: any) {
-        // TODO: connect to the server here
+    const router = useRouter()
+
+    async function handleSubmit(event: any) {
+        // stop refresh
         event.preventDefault()
-        console.log(registerData)
+
+        // create the request
+        const registrationHeader = new Headers();
+        registrationHeader.append("Content-Type", "application/json");
+
+        const registerRequest = new Request("https://capstone-deploy-production.up.railway.app/auth/register", {
+            method: "POST",
+            body: JSON.stringify(registerData),
+            headers: registrationHeader
+        })
+    
+        // try to contact the server and register the user
+        try {
+            const registerResponse = await fetch(registerRequest);
+            if (!registerResponse.ok) {
+                throw new Error(`Response status: ${registerResponse.status}`);
+            } else {
+                router.push('/login')
+            }
+        } catch (error: any) {
+            console.error(error.message);
+        }
     }
 
     return (
@@ -36,11 +60,11 @@ export default function Register() {
             </label>
             <label>
                 First Name &#40;optional&#41;:
-                <input type="text" name="first_name" value={registerData.firstName} onChange={(e) => setRegisterData({...registerData, firstName: e.target.value})} />
+                <input type="text" name="first_name" value={registerData.first_name} onChange={(e) => setRegisterData({...registerData, first_name: e.target.value})} />
             </label>
             <label>
                 Last Name &#40;optional&#41;:
-                <input type="text" name="last_name" value={registerData.lastName} onChange={(e) => setRegisterData({...registerData, lastName: e.target.value})} />
+                <input type="text" name="last_name" value={registerData.last_name} onChange={(e) => setRegisterData({...registerData, last_name: e.target.value})} />
             </label>
             <label>
                 School &#40;optional&#41;:

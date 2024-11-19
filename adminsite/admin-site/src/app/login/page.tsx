@@ -1,28 +1,53 @@
 'use client';
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 
 export default function Page() {
     // this component is the user login page
-    const [email, setEmail] = useState("Email");
+    const [username, setUsername] = useState("Username");
     const [password, setPassword] = useState("");
 
-    function handleSubmit(event: any) {
+    const router = useRouter()
+
+    async function handleSubmit(event: any) {
+        // stop refresh and gather data
         event.preventDefault()
         let userData = {
-            email: email,
+            username: username,
             password: password
         }
-        // put call to the server here
-        console.log(userData)
+
+        // create the request
+        const loginHeader = new Headers();
+        loginHeader.append("Content-Type", "application/json");
+
+        const loginRequest = new Request("https://capstone-deploy-production.up.railway.app/auth/login", {
+            method: "POST",
+            credentials: "include",
+            body: JSON.stringify(userData),
+            headers: loginHeader
+        })
+
+        // try to contact the server and log the user in
+        try {
+            const loginResponse = await fetch(loginRequest);
+            if (!loginResponse.ok) {
+                throw new Error(`Response status: ${loginResponse.status}`)
+            } else {
+                router.push('/account')
+            }
+        } catch(error:any) {
+            console.error(error.message)
+        }
     }
 
     return (
     <div className="Login">
         <form onSubmit={handleSubmit}>
-            <label>Email:
-                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)}></input>
+            <label>Username:
+                <input type="text" value={username} onChange={(e) => setUsername(e.target.value)}></input>
             </label>
             <label>
                 Password:
