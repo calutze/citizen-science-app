@@ -5,9 +5,9 @@ export default function Home() {
   // this component is the base page/landing page
   return (
     <div className="landingPage">
-      <h1>Citizen Science App</h1>
-      <p>Hello welcome to the landing page for the citizen science app!</p>
-      <p>From this website you can:</p>
+      <h1 className="websiteHeader">Citizen Science App</h1>
+      <h2>Hello welcome to the teacher site for the citizen science app!</h2>
+      <h3>From this website you can:</h3>
       <ul>
         <li>Create a new project</li>
         <li>Create observation forms</li>
