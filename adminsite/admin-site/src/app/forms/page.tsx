@@ -5,14 +5,14 @@ import { Trash2, Plus, MoveUp, MoveDown } from 'lucide-react';
 
 // Type definition for FormField, matches backend Model
 interface FormField {
-  field_id: number;
+  field_id?: number;
   field_title: string;
   field_type: string;
   field_description: string;
   field_order: number;
   is_required: boolean;
-  form: number;
-  field_options: string[];
+  form?: number;
+  field_options: string[] | null;
 }
 
 // Type defintion for FromTemplate, matches backend Model
@@ -21,7 +21,7 @@ interface FormTemplate {
   created_at?: string;
   description: string;
   created_by?: string;
-  project_id: number;
+  project_id?: number;
   fields: FormField[];
 }
 
@@ -42,14 +42,12 @@ export default function Page() {
     setFormFields([
       ...formFields,
       {
-        field_id: formFields.length + 1,
         field_title: '',
-        field_type: 'TextInput',
-        field_order: formFields.length + 1,
+        field_type: 'text',
         field_description: '',
-        field_options: [],
-        is_required: false,
-        form: 0, // TODO get the current form number from backend
+        field_options: null,
+        field_order: formFields.length + 1,
+        is_required: true,
       }
     ]);
   }
@@ -84,13 +82,49 @@ export default function Page() {
 
   // Generate FormTemplate JSON from the form
   function generateJSON() {
-    const template: FormTemplate = {
-      project_id: 1, //TODO need to get this id from the backend
+    const template = {
+      credentials: 'include',
       description: formTitle,
       fields: formFields
     }
     setFormJSON(JSON.stringify(template, null, 2));
     console.log(formJSON);
+  }
+
+  async function submitForm() {
+    // Post formJSON to the server
+    const formHeader = new Headers();
+    formHeader.append('Content-Type', 'application/json');
+
+    const template = {
+        description: formTitle,
+        fields: formFields
+    }
+    setFormJSON(JSON.stringify(template, null, 2));
+    const formRequest = new Request("https://capstone-deploy-production.up.railway.app/add-form", {
+      method: 'POST',
+      credentials: 'include',
+      headers: formHeader,
+      body: formJSON
+    })
+    console.log(formRequest);
+
+    try {
+      const response = await fetch(formRequest);
+      if (!response.ok) {
+        throw new Error(`Response status: ${response.status}`);
+      }
+      else {
+        const data = await response.json();
+        console.log('Form submitted successfully');
+        console.log(data);
+      }
+      const data = await response.json();
+      console.log(data);
+    }
+    catch (error: any) {
+      console.error('Error:', error.message);
+    }
   }
 
   return (
@@ -108,7 +142,7 @@ export default function Page() {
 
       {/*Dynamically display form field editing sections*/}
       {formFields.map((field, index) => (
-        <div key={field.field_id}>
+        <div key={index}>
           {/*Title, move and delete buttons*/}
           <h3>Field {index + 1}</h3>
           <button onClick={() => moveField(index, 'up')}>
@@ -169,7 +203,7 @@ export default function Page() {
       </div>
       <div>
         <button 
-          onClick={generateJSON}
+          onClick={submitForm}
           >Generate Form</button>
       </div>
     </div>
