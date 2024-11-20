@@ -1,7 +1,9 @@
 'use client';
 
-import React, { useState } from "react";
+import { useState } from "react";
+import { useSearchParams } from 'next/navigation'
 import { Trash2, Plus, MoveUp, MoveDown } from 'lucide-react';
+//import { ProjectData } from '../../api/ProjectData';
 
 // Type definition for FormField, matches backend Model
 interface FormField {
@@ -21,7 +23,7 @@ interface FormTemplate {
   created_at?: string;
   description: string;
   created_by?: string;
-  project_id?: number;
+  project_id: number;
   fields: FormField[];
 }
 
@@ -29,6 +31,8 @@ export default function Page() {
   const [formFields, setFormFields] = useState<FormField[]>([]);
   const [formTitle, setFormTitle] = useState('');
   const [formJSON, setFormJSON] = useState('');
+  const searchParams = useSearchParams();
+  const selected_project = Number(searchParams.get('project_id'));
 
   const fieldTypes = [
     'text',
@@ -80,23 +84,13 @@ export default function Page() {
     setFormFields(newFields);
   };
 
-  // Generate FormTemplate JSON from the form
-  function generateJSON() {
-    const template = {
-      credentials: 'include',
-      description: formTitle,
-      fields: formFields
-    }
-    setFormJSON(JSON.stringify(template, null, 2));
-    console.log(formJSON);
-  }
-
+  // Post formJSON to the backend to create a new form
   async function submitForm() {
-    // Post formJSON to the server
     const formHeader = new Headers();
     formHeader.append('Content-Type', 'application/json');
 
-    const template = {
+    const template: FormTemplate= {
+        project_id: selected_project,
         description: formTitle,
         fields: formFields
     }
@@ -107,7 +101,6 @@ export default function Page() {
       headers: formHeader,
       body: formJSON
     })
-    console.log(formRequest);
 
     try {
       const response = await fetch(formRequest);
@@ -119,8 +112,6 @@ export default function Page() {
         console.log('Form submitted successfully');
         console.log(data);
       }
-      const data = await response.json();
-      console.log(data);
     }
     catch (error: any) {
       console.error('Error:', error.message);
