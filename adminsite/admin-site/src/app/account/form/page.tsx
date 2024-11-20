@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useSearchParams } from 'next/navigation'
 import { Trash2, Plus, MoveUp, MoveDown } from 'lucide-react';
-//import { ProjectData } from '../../api/ProjectData';
 
 // Type definition for FormField, matches backend Model
 interface FormField {
@@ -41,6 +40,10 @@ export default function Page() {
     'checkbox',
   ]
   
+  //TODO: Check if existing form for this project id exists
+    //If existing form then route to edit form page
+    //If no existing form then route to create form page
+
   // Add a new field to the form builder
   function addField() {
     setFormFields([
@@ -89,7 +92,7 @@ export default function Page() {
     const formHeader = new Headers();
     formHeader.append('Content-Type', 'application/json');
 
-    const template: FormTemplate= {
+    const template: FormTemplate = {
         project_id: selected_project,
         description: formTitle,
         fields: formFields

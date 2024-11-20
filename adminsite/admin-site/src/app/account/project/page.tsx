@@ -62,8 +62,7 @@ export default function Project() {
                 <button>Data Visualization</button>
                 <Link href={{ pathname: "/account/form",
                     query: { project_id: Number(chosen_project) }
-                }}><button>New Observation Form</button></Link>
-                <button>Edit Observation Form</button>
+                }}><button>Observation Form</button></Link>
             </div>
         ) : (
             <p>Oops! Did you pick a project from the list?</p>
