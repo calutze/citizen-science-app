@@ -2,6 +2,7 @@
 
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect } from 'react'
+import Link from 'next/link'
 
 export default function Project() {
     const router = useRouter()
@@ -59,6 +60,9 @@ export default function Project() {
                 <p id='description'></p>
                 <p id='instructions'></p>
                 <button>Data Visualization</button>
+                <Link href={{ pathname: "/account/form",
+                    query: { project_id: Number(chosen_project) }
+                }}><button>New Observation Form</button></Link>
                 <button>Edit Observation Form</button>
             </div>
         ) : (
