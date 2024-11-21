@@ -45,7 +45,8 @@ export default function Page() {
 
     return (
     <div className="Login">
-        <form onSubmit={handleSubmit}>
+        <h1 className="websiteHeader">Citizen Science App</h1>
+        <form onSubmit={handleSubmit} className='loginForm'>
             <label>Username:
                 <input type="text" value={username} onChange={(e) => setUsername(e.target.value)}></input>
             </label>
@@ -54,7 +55,7 @@ export default function Page() {
                 <input type="password" value={password} onChange={(e) => setPassword(e.target.value)}></input>
             </label>
             <input className="submitButton" type="submit"></input>
-            <Link href="/login/register">Not a member? Register here!</Link>
+            <Link href="/login/register" className="registerButton">Not a member? Register here!</Link>
         </form>
     </div>
     )

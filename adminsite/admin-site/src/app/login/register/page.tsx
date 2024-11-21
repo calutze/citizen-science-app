@@ -45,6 +45,7 @@ export default function Register() {
 
     return (
     <div className='register'>
+        <h1 className="websiteHeader">Citizen Science App</h1>
         <form onSubmit={handleSubmit}>
             <label>
                 Username:

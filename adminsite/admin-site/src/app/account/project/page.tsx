@@ -7,8 +7,6 @@ export default function Project() {
     const router = useRouter()
     const searchParams = useSearchParams()
     let chosen_project = searchParams.get('project_id')
-    let projectList
-    let project
 
     async function getProject() {
         // make the request
@@ -32,15 +30,15 @@ export default function Project() {
                 projectGrabbed = projectGrabbed.project
                 // put the information in the ptags
                 let numberP = document.getElementById('number')
-                let titleP = document.getElementById('number')
-                let descriptionP = document.getElementById('number')
-                let instructionsP = document.getElementById('number')
+                let titleP = document.getElementById('title')
+                let descriptionP = document.getElementById('description')
+                let instructionsP = document.getElementById('instructions')
 
                 if (numberP && titleP && descriptionP && instructionsP) {
                     numberP.innerHTML = "Project Number: " + projectGrabbed.project_code
                     titleP.innerHTML = projectGrabbed.title
-                    descriptionP.innerHTML = projectGrabbed.description
-                    instructionsP.innerHTML = projectGrabbed.instructions
+                    descriptionP.innerHTML ="Description: " + projectGrabbed.description
+                    instructionsP.innerHTML = "Instructions: " + projectGrabbed.instructions
                 }
             }
         } catch (error: any) {
@@ -53,7 +51,7 @@ export default function Project() {
 
     return (
         chosen_project ? (
-            <div>
+            <div className="projectDetails">
                 <p id='number'>Project Number:</p>
                 <p id='title'></p>
                 <p id='description'></p>
