@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { View, ScrollView, StyleSheet, TextInput, Text, KeyboardTypeOptions } from 'react-native';
 import { Switch, Button, Checkbox, RadioButton, Title, Surface } from 'react-native-paper';
 import { Picker } from '@react-native-picker/picker';
@@ -28,8 +28,13 @@ interface DynamicFormProps {
   onSubmit: (values: { [key: string]: any }) => void;
 }
 
-const DynamicForm: React.FC<DynamicFormProps> = ({ formData, onSubmit }) => {
+const DynamicForm: React.FC<DynamicFormProps> = ({ formData , onSubmit }) => {
   const [formValues, setFormValues] = useState<{ [key: string]: any }>({});
+  const submitRef = useRef(onSubmit);
+
+  useEffect(() => {
+    submitRef.current = onSubmit;
+  }, [onSubmit]);
 
   // Handle form value changes
   const handleChange = (elementId: number, value: any) => {
@@ -40,9 +45,8 @@ const DynamicForm: React.FC<DynamicFormProps> = ({ formData, onSubmit }) => {
   };
 
   // Render different form elements based on type
-  const renderFormElement = (element: FormField) => {
-    //const { field_id: id, field_title: title, field_type: type, field_options: options } = element;
-    const { field_id, field_title, field_type, field_options, is_required, form, field_order, field_description } = element;  
+  const renderFormElement = (field: FormField) => {
+    const { field_id, field_title, field_type, field_options, is_required, form, field_order, field_description } = field;  
 
     switch (field_type) {
       case 'TextInput':
@@ -54,8 +58,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({ formData, onSubmit }) => {
               onChangeText={(value) => handleChange(field_id, value)}
               value={formValues[field_id] || ''}
               placeholder={field_description || ''}
-              multiline={true}
-              //{...options}
+              multiline={false}
             />
           </View>
         );
@@ -73,7 +76,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({ formData, onSubmit }) => {
                 {field_options && field_options.map((item) => (
                   <Picker.Item
                     key={item}
-                    //label={field_description}
+                    label={item}
                     value={item}
                   />
                 ))}
@@ -89,7 +92,6 @@ const DynamicForm: React.FC<DynamicFormProps> = ({ formData, onSubmit }) => {
             <Switch
               value={formValues[field_id] || false}
               onValueChange={(value) => handleChange(field_id, value)}
-              //{...options}
             />
           </View>
         );
@@ -125,7 +127,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({ formData, onSubmit }) => {
   };
 
   const handleSubmit = () => {
-    onSubmit?.(formValues);
+    onSubmit(formValues);
     console.log(`Form ID ${formData.form_id} submitted:`, formValues);
   };
 
@@ -133,14 +135,13 @@ const DynamicForm: React.FC<DynamicFormProps> = ({ formData, onSubmit }) => {
     <ScrollView>
       <Surface style={styles.container}>
         <Title style={styles.title}>Sample Form ID: {formData.form_id}</Title>
-        {formData.fields
-            .sort((a, b) => a.field_order - b.field_order)
-            .map(element => renderFormElement(element))}
+        {formData.fields.sort(
+            (a, b) => a.field_order - b.field_order
+          ).map(element => renderFormElement(element))}
         
         <Button
             style={styles.submitButton}
-            onPress={handleSubmit}
-        >
+            onPress={handleSubmit}>
             <Text style={styles.submitButtonText}>Submit</Text>
         </Button>
       </Surface>
