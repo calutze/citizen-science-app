@@ -8,12 +8,14 @@ import { useNavigation } from "@react-navigation/native";
 export default function HomeScreen() {
   // useState Hook for student code input
   const [projectCode, onChangeProjectCode] = useState("");
+  const [error, setError] = useState<string | null>(null);
   const navigation = useNavigation();
   return (
     // organize and structure student mobile landing page with text input for project code (TextInput)
     <View style={[styles.homeContainer]}>
       <Text style={styles.header}>Citizen Science App</Text>
       <Text>Student Project Code:</Text>
+      {error && <Text style={styles.error}>{error}</Text>}
       <TextInput
         style={styles.input}
         onChangeText={onChangeProjectCode}
@@ -23,14 +25,27 @@ export default function HomeScreen() {
       />
       <Button
         onPress={async () => {
-          const response = await fetch(
-            "https://capstone-deploy-production.up.railway.app/access-project",
-            {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ project_code: projectCode }),
+          try {
+            const response = await fetch(
+              `https://capstone-deploy-production.up.railway.app/project/${projectCode}`,
+              {
+                credentials: "include",
+                method: "GET",
+              }
+            );
+
+            if (!response.ok) {
+              setError("That project does not exist.");
+              return;
             }
-          );
+
+            const data = await response.json();
+
+            // TODO: Navigate to project details with this: data.project.project_id
+          } catch (error) {
+            console.error(error);
+            setError("Something went wrong. Please try again.");
+          }
         }}
         title="Submit"
         color="#a368eb"
@@ -45,15 +60,20 @@ export default function HomeScreen() {
 
 // Style student landing page elements with StyleSheet import
 const styles = StyleSheet.create({
+  error: {
+    color: "red",
+  },
   homeContainer: {
     backgroundColor: "#dcd5be",
     minHeight: "100%",
+    alignItems: "center",
   },
   header: {
     backgroundColor: "#a368eb",
     fontSize: 40,
     color: "#ffffff",
     textAlign: "center",
+    width: "100%",
   },
   main: {
     display: "flex",
