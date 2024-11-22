@@ -41,7 +41,7 @@ export default function HomeScreen() {
 
             const data = await response.json();
 
-            // TODO: Navigate to project details with this: data.project.project_id
+            // TODO: Navigate to project details page
           } catch (error) {
             console.error(error);
             setError("Something went wrong. Please try again.");
