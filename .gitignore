@@ -1,10 +1,10 @@
 venv/
-
+.venv/
 backend/.env
-
+volumes/
 *.pyc
 __pycache__/
-
+.env
 instance/
 
 migrations/
