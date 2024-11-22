@@ -58,14 +58,11 @@ def add_project():
 
 
 @project.route('/project/<int:project_id>', methods=['GET'])
-@login_required
 def get_project(project_id):
     """ Retrieves project details by project_id. """
     proj = db.session.get(Project, project_id)
 
-    # validate project access
-    result = validate_with_user(proj)
-    if not result:
+    if not proj:
         abort(404)
 
     return jsonify({'success': True, 'project': proj.to_dict()}), 200
