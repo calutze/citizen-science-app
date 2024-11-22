@@ -75,11 +75,9 @@ def add_form():
 
 
 @form.route('/form/<int:form_id>', methods=['GET'])
-@login_required
 def get_form(form_id):
     """ Retrieves form template details by form_id, and associated fields. """
     form_template = validate_form_template(form_id)
-    validate_project_ownership(form_template.project)
 
     return jsonify(form_template.to_dict()), 200
 

@@ -19,6 +19,14 @@ def validate_with_user(item):
     return True
 
 
+def validate_project(item):
+    """ Validates item, and returns result. """
+    if not item:
+        abort(404)
+
+    return True
+
+
 def validate_observation(observation_id):
     """Validates if an observation exists."""
     observation = db.session.get(Observation, observation_id)
