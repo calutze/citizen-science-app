@@ -32,6 +32,7 @@ export default function Navbar() {
 
     return (
         <div className="navbar">
+            <p>Citizen Science App</p>
             <button className="logOut" onClick={handleLogout}>Log Out</button>
         </div>
     )

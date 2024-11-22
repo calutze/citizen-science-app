@@ -97,7 +97,7 @@ export default function Page() {
     return (
     <div className="accountPage">
         <p>Projects</p>
-        <Link href="/account/create">Create a new project</Link>
+        <Link href="/account/create" className= "newProjectButton">Create a new project</Link>
         <p>Project List</p>
         <div className="projectList" id="projectList">
 
