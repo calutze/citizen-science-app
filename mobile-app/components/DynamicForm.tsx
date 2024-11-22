@@ -133,7 +133,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({ formData, onSubmit }) => {
     <ScrollView>
       <Surface style={styles.container}>
         <Title style={styles.title}>Sample Form ID: {formData.form_id}</Title>
-        {formData.elements
+        {formData.fields
             .sort((a, b) => a.field_order - b.field_order)
             .map(element => renderFormElement(element))}
         
