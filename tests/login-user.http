@@ -1,0 +1,7 @@
+POST https://capstone-deploy-production.up.railway.app/auth/login
+Content-Type: application/json
+
+{
+    "username": "steve-panda",
+    "password": "citizen123"
+}

@@ -1,0 +1,9 @@
+POST https://capstone-deploy-production.up.railway.app/add-project
+Content-Type: application/json
+
+{
+"project_code": "XIA93J",
+"title": "Test Project Steve",
+"description": "Test Project Steve",
+"instructions": "Test Instructions Steve"
+}
