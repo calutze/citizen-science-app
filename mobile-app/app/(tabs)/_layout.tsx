@@ -41,41 +41,21 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name='login'
         options={{
-          title: "Observations",
+          title: 'Login',
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon
-              name={focused ? "document" : "document-text-outline"}
-              color={color}
-            />
+            <TabBarIcon name={focused ? 'person' : 'person-outline'} color={color} />
           ),
-        }}
-      />
-      <Tabs.Screen
-        name="login"
-        options={{
-          title: "Login",
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon
-              name={focused ? "person" : "person-outline"}
-              color={color}
-            />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="form"
-        options={{
-          title: "New Observation",
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon
-              name={focused ? "add" : "add-circle-outline"}
-              color={color}
-            />
-          ),
-        }}
-      />
+        }}/>
+        <Tabs.Screen
+          name='form'
+          options={{
+            title: 'New Observation',
+            tabBarIcon: ({ color, focused }) => (
+              <TabBarIcon name={focused ? 'add' : 'add-circle-outline'} color={color} />
+            ),
+          }}/>
     </Tabs>
   );
 }
