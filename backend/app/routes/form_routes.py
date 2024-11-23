@@ -40,14 +40,13 @@ def add_form():
 
     # create form template
     form_template = FormTemplate(
-        project=project_id,
+        form_id=project_id,
         description=description,
         created_by=current_user.user_id
     )
 
     try:
         db.session.add(form_template)
-        db.session.flush()  # get form_id before committing
 
         # add associated fields
         for field_data in fields_data:
@@ -58,7 +57,7 @@ def add_form():
                 field_options=field_data.get('field_options'),
                 field_order=field_data.get('field_order'),
                 is_required=field_data.get('is_required'),
-                form=form_template.form_id
+                form=project_id
             )
             db.session.add(form_field)
 
