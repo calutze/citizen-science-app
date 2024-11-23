@@ -2,8 +2,8 @@ POST https://capstone-deploy-production.up.railway.app/add-project
 Content-Type: application/json
 
 {
-"project_code": "NIA93J",
-"title": "Test Project Steve",
-"description": "Test Project Steve",
-"instructions": "Test Instructions Steve"
+"project_code": "DJIA93J",
+"title": "Grow a Tree",
+"description": "The 'Grow a Tree' citizen science app empowers students to participate in tree-planting and growth tracking projects while contributing valuable data for environmental research. Students can record observations such as tree height, leaf color, and local weather conditions, fostering both scientific engagement and ecological awareness.",
+"instructions": "1. Log in using your assigned project code and begin documenting observations about your assigned tree. Take photos, measure growth metrics, and input data into the app regularly."
 }
