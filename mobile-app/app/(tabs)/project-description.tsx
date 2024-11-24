@@ -34,15 +34,13 @@ export default function ProjectDescription() {
 
   return (
     <View style={[styles.homeContainer]}>
-      <header style={styles.header}>Citizen Science App</header>
-      <main style={styles.main}>
-        Project Description Page
-        <div>{project && project.title}</div>
+      <Text style={styles.header}>Citizen Science App</Text>
+        <Text>Project Description Page</Text>
+        <Text>{project && project.title}</Text>
         <Text>Description:</Text>
         <Text>{project && project.description}</Text>
         <Text>Instructions:</Text>
         <Text>{project && project.instructions}</Text>
-      </main>
     </View>
   );
 }

@@ -28,14 +28,14 @@ export default function HomeScreen() {
         onPress={async () => {
           try {
             setError(null);
-
-            const response = await fetch(
-              `https://capstone-deploy-production.up.railway.app/project/${projectId}`,
-              {
-                credentials: "include",
-                method: "GET",
-              }
-            );
+            const projectHeader = new Headers();
+            projectHeader.append("Content-Type", "application/json");
+            let projectRequest = new Request('https://capstone-deploy-production.up.railway.app/enter-code', {
+              method: "POST",
+              headers: projectHeader,
+              body: JSON.stringify({code: projectId})
+          })
+            const response = await fetch(projectRequest);
 
             if (!response.ok) {
               setError("That project does not exist.");
@@ -45,8 +45,8 @@ export default function HomeScreen() {
             const data = await response.json();
 
             router.push({
-              pathname: `/project-description`,
-              params: { id: data.project.project_id },
+              pathname: `/(tabs)/project-description`,
+              params: { id: data.project_id },
             });
           } catch (error) {
             console.error(error);

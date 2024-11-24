@@ -4,32 +4,23 @@ import React from "react";
 import { TabBarIcon } from "@/components/navigation/TabBarIcon";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
-
-const sample_form_data = {
-  form_id: 1,
-  elements: [
-    {
-      id: 1,
-      title: "Text Input",
-      type: "TextInput",
-      options: { placeholder: "Enter your text here" },
-      order: 1,
-    },
-  ],
-};
+import { routeToScreen } from "expo-router/build/useScreens";
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
 
   return (
     <Tabs
-      screenOptions={{
+      screenOptions={({route}) => ({
         tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
         headerShown: true,
-      }}
+        tabBarStyle: {
+          display: route.name === "index" ? "none" : "flex",
+        },
+      })}
     >
       <Tabs.Screen
-        name="index"
+        name="project-description"
         options={{
           title: "Home",
           tabBarIcon: ({ color, focused }) => (
@@ -41,21 +32,21 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name='login'
+        name='form'
         options={{
-          title: 'Login',
+          title: 'New Observation',
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'person' : 'person-outline'} color={color} />
+            <TabBarIcon name={focused ? 'add' : 'add-circle-outline'} color={color} />
           ),
         }}/>
-        <Tabs.Screen
-          name='form'
-          options={{
-            title: 'New Observation',
-            tabBarIcon: ({ color, focused }) => (
-              <TabBarIcon name={focused ? 'add' : 'add-circle-outline'} color={color} />
-            ),
-          }}/>
+      <Tabs.Screen
+        name='index'
+        options={{
+          title: 'Logout',
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon name={focused ? 'home' : 'log-out-outline'} color={color} />
+          ),
+        }}/>
     </Tabs>
   );
 }

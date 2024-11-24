@@ -1,5 +1,7 @@
 import { View, StyleSheet } from 'react-native';
 import DynamicForm from '@/components/DynamicForm';
+import { useEffect, useState } from 'react';
+import { useLocalSearchParams, router } from "expo-router";
 
 export default function FormScreen() {
   const sampleFormData = {
@@ -81,13 +83,14 @@ export default function FormScreen() {
       }*/
     ]
   };
+  const id = 2;
 
   // Post formJSON to the backend to create a new form
   async function fetchForm() {
     const formHeader = new Headers();
     formHeader.append('Content-Type', 'application/json');
     const formURL = `https://capstone-deploy-production.up.railway.app/form/6`;
-    const formRequest = new Request("https://capstone-deploy-production.up.railway.app/form/", {
+    const formRequest = new Request(`https://capstone-deploy-production.up.railway.app/form/${id}`, {
       method: 'GET',
       credentials: 'include',
       headers: formHeader
@@ -100,12 +103,23 @@ export default function FormScreen() {
       }
       else {
         const formData = await response.json();
+        return formData
       }
     }
     catch (error: any) {
       console.error('Error:', error.message);
     }
   }
+
+  const [formData, setFormData] = useState(null);
+
+  useEffect(() => {
+    fetchForm().then((data) => {
+      setFormData(data);
+    })
+  }, [formData]);
+
+  console.log(formData);
 
   function handleSubmit (values: any) {
     console.log("form.tsx", values);
@@ -116,7 +130,7 @@ export default function FormScreen() {
   return (
     <View style={styles.container}>
       <DynamicForm 
-        formData={sampleFormData}
+        formData={formData || sampleFormData}
         onSubmit={handleSubmit}
       />
     </View>
