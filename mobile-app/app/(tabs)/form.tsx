@@ -1,7 +1,8 @@
 import { View, StyleSheet } from 'react-native';
 import DynamicForm from '@/components/DynamicForm';
 import { useEffect, useState } from 'react';
-import { useLocalSearchParams, router } from "expo-router";
+import { router } from "expo-router";
+import { useProject } from '../ProjectContext';
 
 export default function FormScreen() {
   const sampleFormData = {
@@ -83,14 +84,13 @@ export default function FormScreen() {
       }*/
     ]
   };
-  const id = 2;
+  const { projectId } = useProject();
 
   // Post formJSON to the backend to create a new form
   async function fetchForm() {
     const formHeader = new Headers();
     formHeader.append('Content-Type', 'application/json');
-    const formURL = `https://capstone-deploy-production.up.railway.app/form/6`;
-    const formRequest = new Request(`https://capstone-deploy-production.up.railway.app/form/${id}`, {
+    const formRequest = new Request(`https://capstone-deploy-production.up.railway.app/form/${projectId}`, {
       method: 'GET',
       credentials: 'include',
       headers: formHeader
@@ -111,6 +111,31 @@ export default function FormScreen() {
     }
   }
 
+  async function postForm(formJSON: any) {
+    const formHeader = new Headers();
+    formHeader.append('Content-Type', 'application/json');
+    const formRequest = new Request('https://capstone-deploy-production.up.railway.app/add-observation', {
+      method: 'POST',
+      credentials: 'include',
+      headers: formHeader,
+      body: JSON.stringify(formJSON, null, 2)
+    })
+
+    try {
+      const response = await fetch(formRequest);
+      if (!response.ok) {
+        throw new Error(`Response status: ${response.status}`);
+      }
+      else {
+        const result = await response.json();
+        return result
+      }
+    }
+    catch (error: any) {
+      console.error('Error:', error.message);
+    }
+  }
+
   const [formData, setFormData] = useState(null);
 
   useEffect(() => {
@@ -119,12 +144,12 @@ export default function FormScreen() {
     })
   }, [formData]);
 
-  console.log(formData);
-
   function handleSubmit (values: any) {
-    console.log("form.tsx", values);
-
+    postForm(values).then((data) => { console.log(data) });
     // Handle form submission here
+    router.push({
+      pathname: `/(tabs)/project-description`,
+    });
   };
 
   return (

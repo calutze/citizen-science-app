@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { View, ScrollView, StyleSheet, TextInput, Text, KeyboardTypeOptions } from 'react-native';
+import { View, ScrollView, StyleSheet, TextInput, Text } from 'react-native';
 import { Switch, Button, Checkbox, RadioButton, Title, Surface } from 'react-native-paper';
 import { Picker } from '@react-native-picker/picker';
+import { routeToScreen } from 'expo-router/build/useScreens';
 
 interface FormField {
   field_id: number;
@@ -18,8 +19,7 @@ interface FormData {
   form_id: number;
   created_at?: string;
   description: string;
-  created_by?: string;
-  project_id: number;
+  created_by?: number;
   fields: FormField[];
 }
 
@@ -29,7 +29,7 @@ interface DynamicFormProps {
 }
 
 const DynamicForm: React.FC<DynamicFormProps> = ({ formData , onSubmit }) => {
-  const [formValues, setFormValues] = useState<{ [key: string]: any }>({});
+  const [formValues, setFormValues] = useState<{ [key: string]: string | boolean | null }>({});
   const submitRef = useRef(onSubmit);
 
   useEffect(() => {
@@ -46,10 +46,11 @@ const DynamicForm: React.FC<DynamicFormProps> = ({ formData , onSubmit }) => {
 
   // Render different form elements based on type
   const renderFormElement = (field: FormField) => {
+    //descructure the field object
     const { field_id, field_title, field_type, field_options, is_required, form, field_order, field_description } = field;  
 
     switch (field_type) {
-      case 'TextInput':
+      case 'text':
         return (
           <View style={styles.inputContainer} key={field_id}>
             <Text style={styles.label}>{field_title}</Text>
@@ -58,12 +59,12 @@ const DynamicForm: React.FC<DynamicFormProps> = ({ formData , onSubmit }) => {
               onChangeText={(value) => handleChange(field_id, value)}
               value={formValues[field_id] || ''}
               placeholder={field_description || ''}
-              multiline={false}
+              multiline={true}
             />
           </View>
         );
 
-      case 'Select':
+      case 'select':
         return (
           <View style={styles.inputContainer} key={field_id}>
             <Text style={styles.label}>{field_title}</Text>
@@ -96,7 +97,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({ formData , onSubmit }) => {
           </View>
         );
 
-      case 'Checkbox':
+      case 'checkbox':
         return (
             <View style={styles.checkboxContainer} key={field_id}>
                 <Checkbox.Item
@@ -107,7 +108,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({ formData , onSubmit }) => {
             </View>
         );
 
-      case 'RadioButton':
+      case 'radio':
         return (
           <View style={styles.radioButtonContainer} key={field_id}>
             <Text style={styles.label}>{field_title}</Text>
@@ -127,8 +128,16 @@ const DynamicForm: React.FC<DynamicFormProps> = ({ formData , onSubmit }) => {
   };
 
   const handleSubmit = () => {
-    onSubmit(formValues);
-    console.log(`Form ID ${formData.form_id} submitted:`, formValues);
+    const submit_data = {
+      project_id: formData.form_id,
+      student_identifier: null,
+      image_url: null,
+      observation_values: formData.fields.map(specific_field => ({
+        field: specific_field.field_id,
+        value: formValues[specific_field.field_id],
+      })),
+    };
+    onSubmit(submit_data);
   };
 
   return (
@@ -137,7 +146,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({ formData , onSubmit }) => {
         <Title style={styles.title}>Sample Form ID: {formData.form_id}</Title>
         {formData.fields.sort(
             (a, b) => a.field_order - b.field_order
-          ).map(element => renderFormElement(element))}
+          ).map(field => renderFormElement(field))}
         
         <Button
             style={styles.submitButton}

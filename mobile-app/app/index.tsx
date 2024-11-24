@@ -2,6 +2,7 @@ import { Image, StyleSheet, TextInput, Text, Button } from "react-native";
 import { View } from "react-native";
 import { useState } from "react";
 import { Link, router } from "expo-router";
+import { useProject } from "./ProjectContext";
 // import { useNavigation } from "@react-navigation/native";
 
 // Create a HomeScreen component for student mobile landing page
@@ -9,6 +10,7 @@ export default function HomeScreen() {
   // useState Hook for student code input
   const [projectId, onChangeProjectId] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const { setProjectId } = useProject();
   // const navigation = useNavigation();
 
   return (
@@ -43,10 +45,10 @@ export default function HomeScreen() {
             }
 
             const data = await response.json();
+            setProjectId(data.project_id);
 
             router.push({
               pathname: `/(tabs)/project-description`,
-              params: { id: data.project_id },
             });
           } catch (error) {
             console.error(error);
@@ -93,7 +95,7 @@ const styles = StyleSheet.create({
     height: 30,
     margin: 12,
     borderWidth: 1,
-    padding: 10,
+    padding: 0,
     maxWidth: 250,
     width: "100%",
   },
