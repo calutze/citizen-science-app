@@ -1,20 +1,19 @@
 'use client';
 
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 import { useEffect } from 'react'
 import Link from 'next/link'
 
 export default function Project() {
-    const router = useRouter()
     const searchParams = useSearchParams()
-    let chosen_project = searchParams.get('project_id')
+    const chosen_project = searchParams.get('project_id')
 
     async function getProject() {
         // make the request
         const projectHeader = new Headers();
         projectHeader.append("Content-Type", "application/json");
 
-        let projectRequest = new Request('https://capstone-deploy-production.up.railway.app/project/' + chosen_project,{
+        const projectRequest = new Request('https://capstone-deploy-production.up.railway.app/project/' + chosen_project,{
             method: "GET",
             credentials: "include",
             headers: projectHeader
@@ -22,7 +21,7 @@ export default function Project() {
 
         // grab the project info from the server
         try {
-            let projectResponse = await fetch(projectRequest)
+            const projectResponse = await fetch(projectRequest)
             if (!projectResponse.ok) {
                 throw new Error(`Response status: ${projectResponse.status}`)
             } else {
@@ -30,10 +29,10 @@ export default function Project() {
                 let projectGrabbed = await projectResponse.json()
                 projectGrabbed = projectGrabbed.project
                 // put the information in the ptags
-                let numberP = document.getElementById('number')
-                let titleP = document.getElementById('title')
-                let descriptionP = document.getElementById('description')
-                let instructionsP = document.getElementById('instructions')
+                const numberP = document.getElementById('number')
+                const titleP = document.getElementById('title')
+                const descriptionP = document.getElementById('description')
+                const instructionsP = document.getElementById('instructions')
 
                 if (numberP && titleP && descriptionP && instructionsP) {
                     numberP.innerHTML = "Project Number: " + projectGrabbed.project_code

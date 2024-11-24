@@ -13,7 +13,7 @@ export default function Page() {
 
     const router = useRouter()
 
-    async function createProject(event: any) {
+    async function createProject(event: React.FormEvent<HTMLFormElement>) {
         // stop refresh
         event.preventDefault()
 

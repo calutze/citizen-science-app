@@ -1,4 +1,3 @@
-import styles from "./page.module.css";
 import Link from 'next/link';
 
 export default function Home() {
@@ -11,7 +10,7 @@ export default function Home() {
       <ul>
         <li>Create a new project</li>
         <li>Create observation forms</li>
-        <li>View different projects you've created</li>
+        <li>View different projects you&apos;ve created</li>
         <li>See the data visualized into a singular place</li>
       </ul>
       <div className="loginBox">
