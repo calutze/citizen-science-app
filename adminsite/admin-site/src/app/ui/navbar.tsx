@@ -1,12 +1,11 @@
 'use client';
 
-import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
 export default function Navbar() {
     const router = useRouter()
 
-    async function handleLogout(event: any) {
+    async function handleLogout() {
         // create the request
         const logoutHeader = new Headers();
         logoutHeader.append("Content-Type", "application/json");

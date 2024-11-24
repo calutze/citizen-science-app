@@ -29,7 +29,6 @@ interface FormTemplate {
 export default function Page() {
   const [formFields, setFormFields] = useState<FormField[]>([]);
   const [formTitle, setFormTitle] = useState('');
-  const [formJSON, setFormJSON] = useState('');
   const searchParams = useSearchParams();
   const selected_project = Number(searchParams.get('project_id'));
 
@@ -97,12 +96,12 @@ export default function Page() {
         description: formTitle,
         fields: formFields
     }
-    setFormJSON(JSON.stringify(template, null, 2));
+
     const formRequest = new Request("https://capstone-deploy-production.up.railway.app/add-form", {
       method: 'POST',
       credentials: 'include',
       headers: formHeader,
-      body: formJSON
+      body: JSON.stringify(template, null, 2)
     })
 
     try {
@@ -133,7 +132,7 @@ export default function Page() {
           placeholder="Enter Form Title"
           />
       </div>
-
+      
       {/*Dynamically display form field editing sections*/}
       {formFields.map((field, index) => (
         <div key={index}>

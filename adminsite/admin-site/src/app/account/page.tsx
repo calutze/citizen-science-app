@@ -1,21 +1,5 @@
 'use client';
 
-// dummy projects until it gets connected to the database
-let dummyProjects = [
-    {
-        project_code: "12345",
-        title: "Grow a plant",
-        description: "grow a plant and measure results",
-        instructions: "step 1: blah, step 2: blah blah"
-    },
-    {
-        project_code: "8675309",
-        title: "Average weight of an apple",
-        description: "Weigh a few apples and record their weights and we'll plot all of them and find the average",
-        instructions: "step 1: blah, step 2: blah blah"
-    }
-]
-
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react'
@@ -26,14 +10,14 @@ export default function Page() {
 
     function makeCard(project: any) {
         // make the project cards
-        let projectCard = document.createElement('div')
+        const projectCard = document.createElement('div')
         projectCard.className = 'projectCard'
 
         // create elements
-        let projectTitle = document.createElement('p')
-        let projectCode = document.createElement('p')
-        let projectDesc = document.createElement('p')
-        let projectButton = document.createElement('button')
+        const projectTitle = document.createElement('p')
+        const projectCode = document.createElement('p')
+        const projectDesc = document.createElement('p')
+        const projectButton = document.createElement('button')
 
         // give them classes
         projectTitle.className = 'projectTitle'
@@ -63,7 +47,7 @@ export default function Page() {
         const listHeader = new Headers();
         listHeader.append("Content-Type", "application/json");
 
-        let listRequest = new Request('https://capstone-deploy-production.up.railway.app/user-projects', {
+        const listRequest = new Request('https://capstone-deploy-production.up.railway.app/user-projects', {
             method: "GET",
             credentials: "include",
             headers: listHeader
@@ -71,17 +55,17 @@ export default function Page() {
 
         // call the server for the project list
         try {
-            let listResponse = await fetch(listRequest)
+            const listResponse = await fetch(listRequest)
             if (!listResponse.ok) {
                 throw new Error(`Response status: ${listResponse.status}`)
             } else {
-                let listOfProjects = await listResponse.json() // put the json object here.
-                let divToAppend = document.getElementById('projectList')
+                const listOfProjects = await listResponse.json() // put the json object here.
+                const divToAppend = document.getElementById('projectList')
                 // if the length exists run through the array and put each of them in the make card function then append them to the project list div
                 if (listOfProjects && divToAppend) {
                     divToAppend.innerHTML = ""
                     for (const project in listOfProjects) {
-                        let projectCard = makeCard(listOfProjects[project])
+                        const projectCard = makeCard(listOfProjects[project])
                         divToAppend.append(projectCard)
                     }
                 }

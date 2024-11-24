@@ -14,7 +14,7 @@ export default function Page() {
     async function handleSubmit(event: any) {
         // stop refresh and gather data
         event.preventDefault()
-        let userData = {
+        const userData = {
             username: username,
             password: password
         }
