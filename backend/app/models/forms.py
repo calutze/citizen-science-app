@@ -20,10 +20,11 @@ class FormTemplate(db.Model):
 
     form_id = db.Column(
         db.Integer,
+        db.ForeignKey('projects.project_id', ondelete='CASCADE'),
         primary_key=True,
-        autoincrement=True,
         index=True
         )
+
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     description = db.Column(db.Text)
     created_by = db.Column(
@@ -31,12 +32,7 @@ class FormTemplate(db.Model):
         db.ForeignKey('users.user_id', ondelete='CASCADE'),
         nullable=False, index=True
         )
-    project = db.Column(
-        db.Integer,
-        db.ForeignKey('projects.project_id', ondelete='CASCADE'),
-        nullable=False,
-        index=True
-        )
+
     form_fields = db.relationship(
         'FormField',
         backref='parent_form',
@@ -55,7 +51,6 @@ class FormTemplate(db.Model):
             'created_at': self.created_at.isoformat() if self.created_at else None,
             'description': self.description,
             'created_by': self.created_by,
-            'project_id': self.project,
             'fields': [field.to_dict() for field in self.form_fields]
         }
 
