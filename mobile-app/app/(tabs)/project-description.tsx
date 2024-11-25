@@ -35,14 +35,17 @@ export default function ProjectDescription() {
   }
 
   useEffect(() => {
-    getProject(projectId);
+    if (projectId) {
+      getProject(projectId);
+    }
   }, [projectId]);
 
   return (
     <View style={[styles.homeContainer]}>
       <Text style={styles.header}>Citizen Science App</Text>
-      <Text>Project Description Page</Text>
+      <Text style={styles.header2}>Project Description Page</Text>
       {error && <Text style={styles.error}>{error}</Text>}
+      <Text>Project Title:</Text>
       <Text>{project && project.title}</Text>
       <Text>Description:</Text>
       <Text>{project && project.description}</Text>
@@ -61,11 +64,17 @@ const styles = StyleSheet.create({
     backgroundColor: "#dcd5be",
     minHeight: "100%",
     alignItems: "center",
+    gap: 10,
   },
   header: {
     backgroundColor: "#a368eb",
     fontSize: 40,
     color: "#ffffff",
+    textAlign: "center",
+    width: "100%",
+  },
+  header2: {
+    fontSize: 25,
     textAlign: "center",
     width: "100%",
   },
