@@ -24,7 +24,7 @@ export default function Register() {
         const registrationHeader = new Headers();
         registrationHeader.append("Content-Type", "application/json");
 
-        const registerRequest = new Request("https://capstone-deploy-production.up.railway.app/auth/register", {
+        const registerRequest = new Request("https://exquisite-vision-production.up.railway.app/auth/register", {
             method: "POST",
             body: JSON.stringify(registerData),
             headers: registrationHeader
