@@ -3,45 +3,23 @@ import { View } from "react-native";
 import { useEffect, useState } from "react";
 import { Link, router, useRouter } from "expo-router";
 import { useProject } from "./ProjectContext";
+import { API_URL } from "@/constants/api";
 // import { useNavigation } from "@react-navigation/native";
 
 // Create a HomeScreen component for student mobile landing page
 export default function HomeScreen() {
   // useState Hook for student code input
   const [projectCode, onChangeProjectCode] = useState("");
+  const { setProjectId, error: projectError } = useProject();
   const [error, setError] = useState<string | null>(null);
-  const { setProjectId } = useProject();
   const router = useRouter();
   // const navigation = useNavigation();
-  async function checkSession() {
-    try {
-      const response = await fetch(
-        `https://capstone-deploy-production.up.railway.app/check-session`,
-        {
-          credentials: "include",
-          method: "GET",
-        }
-      );
-      if (!response.ok) {
-        throw new Error(`Response status: ${response.status}`);
-      }
-      const data = await response.json();
-
-      if (data.session_active) {
-        setProjectId(data.project_id);
-        router.push({
-          pathname: `/(tabs)/project-description`,
-        });
-      }
-    } catch (e) {
-      console.error(e);
-      setError("Something went wrong. Please try again.");
-    }
-  }
 
   useEffect(() => {
-    checkSession();
-  }, []);
+    if (projectError) {
+      setError(projectError);
+    }
+  }, [projectError]);
 
   return (
     // organize and structure student mobile landing page with text input for project code (TextInput)
@@ -63,7 +41,7 @@ export default function HomeScreen() {
             const projectHeader = new Headers();
             projectHeader.append("Content-Type", "application/json");
             let projectRequest = new Request(
-              "https://capstone-deploy-production.up.railway.app/enter-code",
+              `https://exquisite-vision-production.up.railway.app/enter-code`,
               {
                 credentials: "include",
                 method: "POST",
