@@ -1,9 +1,11 @@
 import { useRouter } from "expo-router";
 import { useEffect } from "react";
+import { useProject } from "../ProjectContext";
 
 // Create a Project Description component for student mobile project description page
 export default function Logout() {
   const router = useRouter()
+  const { setProjectId } = useProject();
 
   async function performLogout() {
     const response = await fetch(
@@ -20,9 +22,11 @@ export default function Logout() {
       }
       else {
         const data = await response.json();
-        router.push({
-            pathname: `/`,
-          });
+        console.log(data);
+        if (data.success) {
+          setProjectId(null);
+          router.push({pathname: `/`,});
+        }
         return data
       }
     }
@@ -30,6 +34,6 @@ export default function Logout() {
       console.error('Error:', error.message);
     }
   }
-  useEffect(() => { performLogout() });
+  useEffect(() => { performLogout() }, []);
   return null;
 }

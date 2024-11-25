@@ -1,7 +1,7 @@
 import { Image, StyleSheet, TextInput, Text, Button } from "react-native";
 import { View } from "react-native";
-import { useState } from "react";
-import { Link, router } from "expo-router";
+import { useEffect, useState } from "react";
+import { Link, router, useRouter } from "expo-router";
 import { useProject } from "./ProjectContext";
 // import { useNavigation } from "@react-navigation/native";
 
@@ -11,13 +11,34 @@ export default function HomeScreen() {
   const [projectId, onChangeProjectId] = useState("");
   const [error, setError] = useState<string | null>(null);
   const { setProjectId } = useProject();
+  const router = useRouter();
   // const navigation = useNavigation();
-
+  async function checkSession() {
+    const response = await fetch(
+      `https://capstone-deploy-production.up.railway.app/check-session`,
+      {
+        credentials: "include",
+        method: "GET",
+      }
+    );
+    if (!response.ok) {
+      throw new Error(`Response status: ${response.status}`);
+    }
+    const data = await response.json();
+    console.log(data);
+    if (data.session_active) {
+      setProjectId(data.project_id);
+      router.push({
+        pathname: `/(tabs)/project-description`,
+      });
+    }
+  }
+  useEffect(() => {checkSession()}, []);  
   return (
     // organize and structure student mobile landing page with text input for project code (TextInput)
     <View style={[styles.homeContainer]}>
       <Text style={styles.header}>Citizen Science App</Text>
-      <Text>Student Project ID:</Text>
+      <Text>Student Project Code:</Text>
       {error && <Text style={styles.error}>{error}</Text>}
       <TextInput
         style={styles.input}
@@ -33,6 +54,7 @@ export default function HomeScreen() {
             const projectHeader = new Headers();
             projectHeader.append("Content-Type", "application/json");
             let projectRequest = new Request('https://capstone-deploy-production.up.railway.app/enter-code', {
+              credentials: "include",
               method: "POST",
               headers: projectHeader,
               body: JSON.stringify({code: projectId})
@@ -45,6 +67,7 @@ export default function HomeScreen() {
             }
 
             const data = await response.json();
+            console.log(data);
             setProjectId(data.project_id);
 
             router.push({
