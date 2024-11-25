@@ -3,37 +3,24 @@ import { View } from "react-native";
 import { useEffect, useState } from "react";
 import { Link, router, useRouter } from "expo-router";
 import { useProject } from "./ProjectContext";
+import { API_URL } from "@/constants/api";
 // import { useNavigation } from "@react-navigation/native";
 
 // Create a HomeScreen component for student mobile landing page
 export default function HomeScreen() {
   // useState Hook for student code input
-  const [projectId, onChangeProjectId] = useState("");
+  const [projectCode, onChangeProjectCode] = useState("");
+  const { setProjectId, error: projectError } = useProject();
   const [error, setError] = useState<string | null>(null);
-  const { setProjectId } = useProject();
   const router = useRouter();
   // const navigation = useNavigation();
-  async function checkSession() {
-    const response = await fetch(
-      `https://capstone-deploy-production.up.railway.app/check-session`,
-      {
-        credentials: "include",
-        method: "GET",
-      }
-    );
-    if (!response.ok) {
-      throw new Error(`Response status: ${response.status}`);
+
+  useEffect(() => {
+    if (projectError) {
+      setError(projectError);
     }
-    const data = await response.json();
-    console.log(data);
-    if (data.session_active) {
-      setProjectId(data.project_id);
-      router.push({
-        pathname: `/(tabs)/project-description`,
-      });
-    }
-  }
-  useEffect(() => {checkSession()}, []);  
+  }, [projectError]);
+
   return (
     // organize and structure student mobile landing page with text input for project code (TextInput)
     <View style={[styles.homeContainer]}>
@@ -42,9 +29,9 @@ export default function HomeScreen() {
       {error && <Text style={styles.error}>{error}</Text>}
       <TextInput
         style={styles.input}
-        onChangeText={onChangeProjectId}
-        value={projectId}
-        placeholder="Enter Student Project ID Here!"
+        onChangeText={onChangeProjectCode}
+        value={projectCode}
+        placeholder="Enter Student Project Code Here!"
         keyboardType="default"
       />
       <Button
@@ -53,12 +40,15 @@ export default function HomeScreen() {
             setError(null);
             const projectHeader = new Headers();
             projectHeader.append("Content-Type", "application/json");
-            let projectRequest = new Request('https://capstone-deploy-production.up.railway.app/enter-code', {
-              credentials: "include",
-              method: "POST",
-              headers: projectHeader,
-              body: JSON.stringify({code: projectId})
-          })
+            let projectRequest = new Request(
+              `https://exquisite-vision-production.up.railway.app/enter-code`,
+              {
+                credentials: "include",
+                method: "POST",
+                headers: projectHeader,
+                body: JSON.stringify({ code: projectCode }),
+              }
+            );
             const response = await fetch(projectRequest);
 
             if (!response.ok) {

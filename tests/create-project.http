@@ -1,4 +1,4 @@
-POST https://capstone-deploy-production.up.railway.app/add-project
+POST https://exquisite-vision-production.up.railway.app/add-project
 Content-Type: application/json
 
 {
