@@ -36,7 +36,7 @@ export default function ProjectDescription() {
 
   useEffect(() => {
     getProject(projectId);
-  }, []);
+  }, [projectId]);
 
   return (
     <View style={[styles.homeContainer]}>
