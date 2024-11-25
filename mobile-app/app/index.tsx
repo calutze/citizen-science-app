@@ -1,7 +1,8 @@
 import { Image, StyleSheet, TextInput, Text, Button } from "react-native";
 import { View } from "react-native";
-import { useState } from "react";
-import { Link, router } from "expo-router";
+import { useEffect, useState } from "react";
+import { Link, router, useRouter } from "expo-router";
+import { useProject } from "./ProjectContext";
 // import { useNavigation } from "@react-navigation/native";
 
 // Create a HomeScreen component for student mobile landing page
@@ -9,13 +10,35 @@ export default function HomeScreen() {
   // useState Hook for student code input
   const [projectId, onChangeProjectId] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const { setProjectId } = useProject();
+  const router = useRouter();
   // const navigation = useNavigation();
-
+  async function checkSession() {
+    const response = await fetch(
+      `https://capstone-deploy-production.up.railway.app/check-session`,
+      {
+        credentials: "include",
+        method: "GET",
+      }
+    );
+    if (!response.ok) {
+      throw new Error(`Response status: ${response.status}`);
+    }
+    const data = await response.json();
+    console.log(data);
+    if (data.session_active) {
+      setProjectId(data.project_id);
+      router.push({
+        pathname: `/(tabs)/project-description`,
+      });
+    }
+  }
+  useEffect(() => {checkSession()}, []);  
   return (
     // organize and structure student mobile landing page with text input for project code (TextInput)
     <View style={[styles.homeContainer]}>
       <Text style={styles.header}>Citizen Science App</Text>
-      <Text>Student Project ID:</Text>
+      <Text>Student Project Code:</Text>
       {error && <Text style={styles.error}>{error}</Text>}
       <TextInput
         style={styles.input}
@@ -28,14 +51,15 @@ export default function HomeScreen() {
         onPress={async () => {
           try {
             setError(null);
-
-            const response = await fetch(
-              `https://capstone-deploy-production.up.railway.app/project/${projectId}`,
-              {
-                credentials: "include",
-                method: "GET",
-              }
-            );
+            const projectHeader = new Headers();
+            projectHeader.append("Content-Type", "application/json");
+            let projectRequest = new Request('https://capstone-deploy-production.up.railway.app/enter-code', {
+              credentials: "include",
+              method: "POST",
+              headers: projectHeader,
+              body: JSON.stringify({code: projectId})
+          })
+            const response = await fetch(projectRequest);
 
             if (!response.ok) {
               setError("That project does not exist.");
@@ -43,10 +67,11 @@ export default function HomeScreen() {
             }
 
             const data = await response.json();
+            console.log(data);
+            setProjectId(data.project_id);
 
             router.push({
-              pathname: `/project-description`,
-              params: { id: data.project.project_id },
+              pathname: `/(tabs)/project-description`,
             });
           } catch (error) {
             console.error(error);
@@ -93,7 +118,7 @@ const styles = StyleSheet.create({
     height: 30,
     margin: 12,
     borderWidth: 1,
-    padding: 10,
+    padding: 0,
     maxWidth: 250,
     width: "100%",
   },

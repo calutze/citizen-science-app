@@ -1,25 +1,26 @@
-import React, { useState } from 'react';
-import { View, ScrollView, StyleSheet, TextInput, Text, KeyboardTypeOptions } from 'react-native';
+import React, { useEffect, useState, useRef } from 'react';
+import { View, ScrollView, StyleSheet, TextInput, Text } from 'react-native';
 import { Switch, Button, Checkbox, RadioButton, Title, Surface } from 'react-native-paper';
 import { Picker } from '@react-native-picker/picker';
+import { routeToScreen } from 'expo-router/build/useScreens';
 
-interface FormElement {
-  id: number;
-  title: string;
-  type: string;
-  order: number;
-  options?: {
-    placeholder?: string;
-    keyboardType?: KeyboardTypeOptions;
-    secure?: boolean;
-    multiline?: boolean;
-    items?: { label: string; value: string }[];
-  };
+interface FormField {
+  field_id: number;
+  field_title: string;
+  field_type: string;
+  field_description: string;
+  field_order: number;
+  field_options: string[] | null;
+  is_required: boolean;
+  form?: number;
 }
 
 interface FormData {
   form_id: number;
-  elements: FormElement[];
+  created_at?: string;
+  description: string;
+  created_by?: number;
+  fields: FormField[];
 }
 
 interface DynamicFormProps {
@@ -27,8 +28,13 @@ interface DynamicFormProps {
   onSubmit: (values: { [key: string]: any }) => void;
 }
 
-const DynamicForm: React.FC<DynamicFormProps> = ({ formData, onSubmit }) => {
-  const [formValues, setFormValues] = useState<{ [key: string]: any }>({});
+const DynamicForm: React.FC<DynamicFormProps> = ({ formData , onSubmit }) => {
+  const [formValues, setFormValues] = useState<{ [key: string]: string | boolean | null }>({});
+  const submitRef = useRef(onSubmit);
+
+  useEffect(() => {
+    submitRef.current = onSubmit;
+  }, [onSubmit]);
 
   // Handle form value changes
   const handleChange = (elementId: number, value: any) => {
@@ -39,42 +45,40 @@ const DynamicForm: React.FC<DynamicFormProps> = ({ formData, onSubmit }) => {
   };
 
   // Render different form elements based on type
-  const renderFormElement = (element: FormElement) => {
-    const { id, title, type, options = {} } = element;
+  const renderFormElement = (field: FormField) => {
+    //descructure the field object
+    const { field_id, field_title, field_type, field_options, is_required, form, field_order, field_description } = field;  
 
-    switch (type) {
-      case 'TextInput':
+    switch (field_type) {
+      case 'text':
         return (
-          <View style={styles.inputContainer} key={id}>
-            <Text style={styles.label}>{title}</Text>
+          <View style={styles.inputContainer} key={field_id}>
+            <Text style={styles.label}>{field_title}</Text>
             <TextInput
               style={styles.textInput}
-              onChangeText={(value) => handleChange(id, value)}
-              value={formValues[id] || ''}
-              placeholder={options.placeholder || ''}
-              keyboardType={options.keyboardType || 'default'}
-              secureTextEntry={options.secure || false}
-              multiline={options.multiline || false}
-              {...options}
+              onChangeText={(value) => handleChange(field_id, value)}
+              value={formValues[field_id] || ''}
+              placeholder={field_description || ''}
+              multiline={true}
             />
           </View>
         );
 
-      case 'Select':
+      case 'select':
         return (
-          <View style={styles.inputContainer} key={id}>
-            <Text style={styles.label}>{title}</Text>
+          <View style={styles.inputContainer} key={field_id}>
+            <Text style={styles.label}>{field_title}</Text>
             <View style={styles.pickerContainer}>
               <Picker
-                selectedValue={formValues[id]}
-                onValueChange={(value) => handleChange(id, value)}
+                selectedValue={formValues[field_id]}
+                onValueChange={(value) => handleChange(field_id, value)}
                 style={styles.picker}
               >
-                {options.items?.map((item) => (
+                {field_options && field_options.map((item) => (
                   <Picker.Item
-                    key={item.value}
-                    label={item.label}
-                    value={item.value}
+                    key={item}
+                    label={item}
+                    value={item}
                   />
                 ))}
               </Picker>
@@ -84,35 +88,34 @@ const DynamicForm: React.FC<DynamicFormProps> = ({ formData, onSubmit }) => {
 
       case 'Switch':
         return (
-          <View style={styles.switchContainer} key={id}>
-            <Text style={styles.label}>{title}</Text>
+          <View style={styles.switchContainer} key={field_id}>
+            <Text style={styles.label}>{field_title}</Text>
             <Switch
-              value={formValues[id] || false}
-              onValueChange={(value) => handleChange(id, value)}
-              {...options}
+              value={formValues[field_id] || false}
+              onValueChange={(value) => handleChange(field_id, value)}
             />
           </View>
         );
 
-      case 'Checkbox':
+      case 'checkbox':
         return (
-            <View style={styles.checkboxContainer} key={id}>
+            <View style={styles.checkboxContainer} key={field_id}>
                 <Checkbox.Item
-                    label={title}
-                    status={formValues[id] ? 'checked' : 'unchecked'}
-                    onPress={() => handleChange(id, !formValues[id])}
+                    label={field_title}
+                    status={formValues[field_id] ? 'checked' : 'unchecked'}
+                    onPress={() => handleChange(field_id, !formValues[field_id])}
                 />
             </View>
         );
 
-      case 'RadioButton':
+      case 'radio':
         return (
-          <View style={styles.radioButtonContainer} key={id}>
-            <Text style={styles.label}>{title}</Text>
-            <RadioButton.Group onValueChange={newValue => handleChange(id, newValue)} value={formValues[id]}>
-              {options.items?.map(item => (
-                <View key={item.value}>
-                  <Text style={styles.radioLabel}>{item.label}<RadioButton value={item.value} /></Text>
+          <View style={styles.radioButtonContainer} key={field_id}>
+            <Text style={styles.label}>{field_title}</Text>
+            <RadioButton.Group onValueChange={newValue => handleChange(field_id, newValue)} value={formValues[field_id]}>
+              {field_options && field_options.map(item => (
+                <View key={item}>
+                  <Text style={styles.radioLabel}>{item}<RadioButton value={item} /></Text>
                 </View>
               ))}
             </RadioButton.Group>
@@ -125,22 +128,29 @@ const DynamicForm: React.FC<DynamicFormProps> = ({ formData, onSubmit }) => {
   };
 
   const handleSubmit = () => {
-    onSubmit?.(formValues);
-    console.log(`Form ID ${formData.form_id} submitted:`, formValues);
+    const submit_data = {
+      project_id: formData.form_id,
+      student_identifier: null,
+      image_url: null,
+      observation_values: formData.fields.map(specific_field => ({
+        field: specific_field.field_id,
+        value: formValues[specific_field.field_id],
+      })),
+    };
+    onSubmit(submit_data);
   };
 
   return (
     <ScrollView>
       <Surface style={styles.container}>
         <Title style={styles.title}>Sample Form ID: {formData.form_id}</Title>
-        {formData.elements
-            .sort((a, b) => a.order - b.order)
-            .map(element => renderFormElement(element))}
+        {formData.fields.sort(
+            (a, b) => a.field_order - b.field_order
+          ).map(field => renderFormElement(field))}
         
         <Button
             style={styles.submitButton}
-            onPress={handleSubmit}
-        >
+            onPress={handleSubmit}>
             <Text style={styles.submitButtonText}>Submit</Text>
         </Button>
       </Surface>
