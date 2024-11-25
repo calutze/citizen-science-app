@@ -97,7 +97,7 @@ export default function Page() {
         fields: formFields
     }
 
-    const formRequest = new Request("https://capstone-deploy-production.up.railway.app/add-form", {
+    const formRequest = new Request("https://exquisite-vision-production.up.railway.app/add-form", {
       method: 'POST',
       credentials: 'include',
       headers: formHeader,

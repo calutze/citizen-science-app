@@ -21,7 +21,7 @@ export default function Page() {
         const createProjectHeader = new Headers();
         createProjectHeader.append("Content-Type", "application/json");
 
-        const createProjectRequest = new Request("https://capstone-deploy-production.up.railway.app/add-project",{
+        const createProjectRequest = new Request("https://exquisite-vision-production.up.railway.app/add-project",{
             method: "POST",
             credentials: "include",
             body: JSON.stringify(projectData),

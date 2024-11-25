@@ -47,7 +47,7 @@ export default function Page() {
         const listHeader = new Headers();
         listHeader.append("Content-Type", "application/json");
 
-        const listRequest = new Request('https://capstone-deploy-production.up.railway.app/user-projects', {
+        const listRequest = new Request('https://exquisite-vision-production.up.railway.app/user-projects', {
             method: "GET",
             credentials: "include",
             headers: listHeader

@@ -13,7 +13,7 @@ export default function Project() {
         const projectHeader = new Headers();
         projectHeader.append("Content-Type", "application/json");
 
-        const projectRequest = new Request('https://capstone-deploy-production.up.railway.app/project/' + chosen_project,{
+        const projectRequest = new Request('https://exquisite-vision-production.up.railway.app/project/' + chosen_project,{
             method: "GET",
             credentials: "include",
             headers: projectHeader

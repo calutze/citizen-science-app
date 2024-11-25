@@ -10,7 +10,7 @@ export default function Navbar() {
         const logoutHeader = new Headers();
         logoutHeader.append("Content-Type", "application/json");
 
-        const logoutRequest = new Request("https://capstone-deploy-production.up.railway.app/auth/logout", {
+        const logoutRequest = new Request("https://exquisite-vision-production.up.railway.app/auth/logout", {
             method: "POST",
             credentials: 'include',
             headers: logoutHeader

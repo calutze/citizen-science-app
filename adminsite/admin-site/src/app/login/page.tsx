@@ -23,7 +23,7 @@ export default function Page() {
         const loginHeader = new Headers();
         loginHeader.append("Content-Type", "application/json");
 
-        const loginRequest = new Request("https://capstone-deploy-production.up.railway.app/auth/login", {
+        const loginRequest = new Request("https://exquisite-vision-production.up.railway.app/auth/login", {
             method: "POST",
             credentials: "include",
             body: JSON.stringify(userData),
