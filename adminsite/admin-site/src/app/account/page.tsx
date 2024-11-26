@@ -4,6 +4,9 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react'
 
+import ChartComponent from './ui/chart_component';
+
+
 export default function Page() {
     // this component is the users account page. will eventually have functionality to click a make new project button, explore current projects, and look at observations.
     const router = useRouter()
@@ -29,7 +32,7 @@ export default function Page() {
         projectTitle.innerText = project.title
         projectCode.innerText = "Project code: " + project.project_code
         projectDesc.innerText = project.description
-        projectButton.innerText = "Edit Project"
+        projectButton.innerText = "View Project"
         projectButton.onclick = () => {router.push('/account/project?project_id='+project.project_id)}
 
         // append all info to card
@@ -47,7 +50,7 @@ export default function Page() {
         const listHeader = new Headers();
         listHeader.append("Content-Type", "application/json");
 
-        const listRequest = new Request('https://exquisite-vision-production.up.railway.app/user-projects', {
+        const listRequest = new Request('https://capstone-deploy-production.up.railway.app/user-projects', {
             method: "GET",
             credentials: "include",
             headers: listHeader
@@ -80,12 +83,16 @@ export default function Page() {
 
     return (
     <div className="accountPage">
-        <p>Projects</p>
-        <Link href="/account/create" className= "newProjectButton">Create a new project</Link>
-        <p>Project List</p>
-        <div className="projectList" id="projectList">
+        <h1>Projects Dashboard</h1>
+        <h4>Manage all your projects here.</h4>
 
+        <div className='chartSection'>
+            <ChartComponent />
         </div>
+        <br/>
+        {/* <h2>Projects</h2> */}
+        <Link href="/account/create" className= "newProjectButton">Create New Project</Link>
+        <div className="projectList" id="projectList"></div>
     </div>
     )
 }

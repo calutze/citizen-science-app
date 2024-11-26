@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useSearchParams } from 'next/navigation'
 import { Trash2, Plus, MoveUp, MoveDown } from 'lucide-react';
+import "./styles.css";
 
 // Type definition for FormField, matches backend Model
 interface FormField {
@@ -97,7 +98,7 @@ export default function Page() {
         fields: formFields
     }
 
-    const formRequest = new Request("https://exquisite-vision-production.up.railway.app/add-form", {
+    const formRequest = new Request("https://capstone-deploy-production.up.railway.app/add-form", {
       method: 'POST',
       credentials: 'include',
       headers: formHeader,
@@ -135,15 +136,18 @@ export default function Page() {
       
       {/*Dynamically display form field editing sections*/}
       {formFields.map((field, index) => (
-        <div key={index}>
+        <div key={index} className="field-container">
           {/*Title, move and delete buttons*/}
           <h3>Field {index + 1}</h3>
+          <div className="field-actions">
           <button onClick={() => moveField(index, 'up')}>
             <MoveUp /></button>
           <button onClick={() => moveField(index, 'down')}>
             <MoveDown /></button>
           <button onClick={() => removeField(index)}>
             <Trash2 /></button>
+          </div>
+
           {/*Type of field*/}
           <div>
             <label>Type</label>
@@ -192,7 +196,7 @@ export default function Page() {
       ))}
       <div>
         <button onClick={addField}>
-          <Plus />Add Field</button>
+          <Plus /> Add Field</button>
       </div>
       <div>
         <button 

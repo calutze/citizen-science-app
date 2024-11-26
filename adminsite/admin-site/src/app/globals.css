@@ -1,73 +1,52 @@
 :root {
-    --accent-color: #307d2c;
-    --background-color: #dcd5be;
-    --lesser-accent: #af9f6a;
-    --site-font: Arial, Helvetica, sans-serif;
+    --accent-color: #125c3a;
+    --background-color: #f3ead8;
+    --lesser-accent: #ebe9e3;
+    --site-font: 'Roboto', 'Arial', Helvetica, sans-serif;
+    --hover: #f1f1f1;
     --header-size: 50px;
-    --site-font-size: 15px;
+    --site-font-size: 16px;
+    --shadow: rgba(0, 0, 0, 0.1);
 }
 
 body {
     background-color: var(--background-color);
     font-family: var(--site-font);
+    color: #333;
+    line-height: 1.6;
+    margin: 0;
 }
 
-form {
-    width: 50%;
-    margin: 0 auto;
-    margin-top: 20%;
-    border: 2px solid black;
-    border-radius: 10px;
-    background-color: var(--lesser-accent);
-}
-
-form > * {
-    margin: 1em;
-    display: block;
+h1, h2, h3, h4 {
+    margin: 20px;
     text-align: center;
+    font-weight: 600;
+    color: var(--accent-color);
 }
 
-.submitButton {
-    margin: 2px auto;
-    width: 50%;
-    padding: 15px;
-    font-size: 20px;
-    background-color: var(--lesser-accent);
-    border: 1px solid black;
+h1 {
+    font-size: 3rem;
 }
 
-.submitButton:hover {
-    background-color: var(--accent-color);
+h2 {
+    font-size: 2rem;
 }
 
-/* navbar */
-.navbar {
-    background-color: var(--accent-color);
-    padding: 10px;
-    text-align: center;
-    margin-bottom: 10px;
-    min-height: 20px;
+h3 {
+    font-size: 1.5rem;
+    color: #555;
 }
 
-.navbar p {
-    font-size: 20px;
-    color:white;
-    text-align: left;
-    display: inline;
-    float: left;
+h4 {
+    font-size: 1.2rem;
+    color: #3b3b3b;
+    padding-bottom: 20px;
 }
 
-.navbar button {
-    display: inline;
-    margin-left: auto;
-    margin-right: 0;
-    background-color: var(--accent-color);
-    border: none;
-    color: white;
-    float: right;
+p {
+    margin-bottom: 15px;
 }
 
-/* landing page */
 .websiteHeader {
     background-color: var(--accent-color);
     font-size: var(--header-size);
@@ -77,121 +56,271 @@ form > * {
     margin-bottom: 10px;
 }
 
-h2 {
-    font-size: 30px;
+form {
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    width: 40%;
+    margin: 5% auto;
+    padding: 20px;
+    border: 1px solid var(--shadow);
+    border-radius: 10px;
+    background-color: var(--lesser-accent);
+    box-shadow: 0 4px 8px var(--shadow);
+    transition: box-shadow 0.3s ease;
+}
+
+form:hover {
+    box-shadow: 0 6px 12px var(--shadow);
+}
+
+.inputLabel {
+    width: 60%;
+    font-weight: bold;
+    color: #444;
+    padding: 0.5em;
     text-align: center;
-    margin: 20px;
 }
 
-.landingPage h3 {
-    text-align: center;
-    font-size: 20px;
-    margin-top: 50px;
-}
-
-ul {
-    text-align: center;
-    padding: 10px;
-    font-size: 16px;
-}
-
-li {
-    padding: 10px
-}
-
-.loginBox {
-    width: 50%;
+.inputBox {
     margin: 0 auto;
+    width: 90%;
+    padding: 10px;
+    border: 1px solid var(--shadow);
+    border-radius: 5px;
+    box-shadow: inset 0 2px 4px var(--shadow);
+}
+
+.submitButton {
+    display: block;
+    width: 60%;
+    padding: 15px;
+    margin: 30px;
+    font-size: 1rem;
+    background-color: var(--accent-color);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.submitButton:hover {
+    background-color: #10412a;
+    transform: scale(1.05);
+}
+
+.navbar {
+    background-color: var(--accent-color);
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 4px var(--shadow);
+}
+
+.navbar p {
+    font-size: 1.2rem;
+    color: white;
+    margin: 0;
+}
+
+.navbar-actions {
+    margin-left: auto;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+
+/* project dashboard link */
+.navButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 5px 10px;
+    font-size: 1rem;
+    background-color: var(--accent-color);
+    color: white;
+    border-radius: 3px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+
+    height: 40px;
+    line-height: 1;
+}
+
+
+.navButton:hover {
+    background-color: #10412a;
+}
+
+.navbar button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 5px 10px;
+    font-size: 1rem;
+    background-color: var(--accent-color);
+    border: none;
+    color: white;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    height: 40px;
+    line-height: 1;
+}
+.navbar button:hover {
+    background-color: #10412a;
+}
+
+
+/* landing page */
+.landingContainer {
     text-align: center;
-    border: 2px solid black;
-    padding: 50px 20px;
-    border-radius: 10px;
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 20px;
     background-color: var(--lesser-accent);
-}
-
-.loginBox > * {
-    margin-top: 1em;
-}
-
-/* login page */
-.loginForm {
-    margin-top: 20%;
-    border: 2px solid black;
     border-radius: 10px;
-    background-color: var(--lesser-accent);
+    box-shadow: 0 4px 8px var(--shadow);
 }
 
-/* account */
-.accountPage {
-    text-align: center;
+.infoSection {
+    margin-bottom: 20px;
+    padding: 20px;
 }
 
-.accountPage > p {
-    font-size: 20px;
-    margin: 1em;
+.infoSection h3 {
+    font-size: 1.8rem;
+    /* color: var(--accent-color); */
+    margin-bottom: 15px;
+}
+
+.infoSection ul {
+    list-style-type: none;
+    padding: 0;
+    background-color: white;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 4px var(--shadow);
+}
+
+.infoSection li {
+    padding: 10px;
+    font-size: 1rem;
+    color: #333;
+    /* background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px var(--shadow); */
 }
 
 .newProjectButton {
     display: block;
     width: 20%;
+    padding: 15px;
+    margin: 30px auto;
+    font-size: 1rem;
+    background-color: var(--accent-color);
+    color: white;
+    text-align: center;
     border: none;
-    margin: 0 auto;
-    background-color: var(--lesser-accent);
-    padding: 10px 20px;
     text-decoration: None;
-    color: black;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .newProjectButton:hover {
-    background-color: var(--background-color);
+    background-color: #10412a;
+    transform: scale(1.05);
+}
+
+
+/* project cards */
+
+.projectList {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+    margin: 0 auto;
 }
 
 .projectCard {
     width: 25%;
-    margin: 0 auto;
+    margin: 20px auto;
+    padding: 20px;
     text-align: center;
-    border: 2px solid black;
+    border: 1px solid var(--shadow);
     border-radius: 10px;
-    min-height: 10em;
     display: inline-block;
+    vertical-align: top;
     margin: 1em;
-}
-
-.projectCard p {
-    padding: 1em;
+    background-color: white;
+    box-shadow: 0 4px 8px var(--shadow);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .projectTitle {
     font-weight: bold;
+    font-size: large;
+}
+
+.projectCard:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px var(--shadow);
 }
 
 .projectButton {
+    background-color: var(--accent-color);
+    color: white;
     border: none;
-    margin: 2px;
-    background-color: var(--lesser-accent);
-    padding: 10px 20px;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 .projectButton:hover {
-    background-color: var(--background-color);
+    background-color: #1b4b40;
 }
 
-/* project details page */
-.projectDetails {
+/* containers */
+.container {
+    width: 90%;
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
     text-align: center;
+    background-color: white;
+    border: 1px solid var(--shadow);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px var(--shadow);
 }
 
-.projectDetails > p {
-    margin: 1em;
+.chart-container {
+    width: 60%;
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    text-align: center;
+    background-color: white;
+    border: 1px solid var(--shadow);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px var(--shadow);
 }
 
-.projectDetails > button {
-    border: none;
-    margin: 2px;
-    background-color: var(--lesser-accent);
-    padding: 10px 20px;
-}
-
-.projectDetails > button:hover {
-    background-color: var(--background-color);
+/* fixes responsive issues */
+.chart-container canvas {
+    width: 100% !important; 
+    height: 30% !important;
 }

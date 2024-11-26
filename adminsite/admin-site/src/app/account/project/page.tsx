@@ -13,7 +13,7 @@ export default function Project() {
         const projectHeader = new Headers();
         projectHeader.append("Content-Type", "application/json");
 
-        const projectRequest = new Request('https://exquisite-vision-production.up.railway.app/project/' + chosen_project,{
+        const projectRequest = new Request('https://capstone-deploy-production.up.railway.app/project/' + chosen_project,{
             method: "GET",
             credentials: "include",
             headers: projectHeader
@@ -52,14 +52,17 @@ export default function Project() {
     return (
         chosen_project ? (
             <div className="projectDetails">
-                <p id='number'>Project Number:</p>
-                <p id='title'></p>
-                <p id='description'></p>
-                <p id='instructions'></p>
-                <button>Data Visualization</button>
-                <Link href={{ pathname: "/account/form",
-                    query: { project_id: Number(chosen_project) }
-                }}><button>Observation Form</button></Link>
+                <h2>Project Details</h2>
+                <div className="container">
+                    <p style={{ fontWeight: "bold" }}id='number'>Project Number:</p>
+                    <p id='title'></p>
+                    <p id='description'></p>
+                    <p id='instructions'></p>
+                    
+                    <Link href={{ pathname: "/account/form",
+                        query: { project_id: Number(chosen_project) }
+                    }}><button className="projectButton">Create an Observation Form</button></Link>
+                </div>
             </div>
         ) : (
             <p>Oops! Did you pick a project from the list?</p>

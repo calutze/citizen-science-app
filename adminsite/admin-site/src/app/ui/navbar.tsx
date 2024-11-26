@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useRouter } from 'next/navigation'
 
 export default function Navbar() {
@@ -10,7 +11,7 @@ export default function Navbar() {
         const logoutHeader = new Headers();
         logoutHeader.append("Content-Type", "application/json");
 
-        const logoutRequest = new Request("https://exquisite-vision-production.up.railway.app/auth/logout", {
+        const logoutRequest = new Request("https://capstone-deploy-production.up.railway.app/auth/logout", {
             method: "POST",
             credentials: 'include',
             headers: logoutHeader
@@ -32,7 +33,10 @@ export default function Navbar() {
     return (
         <div className="navbar">
             <p>Citizen Science App</p>
-            <button className="logOut" onClick={handleLogout}>Log Out</button>
+            <div className="navbar-actions">
+                <Link href="/account" className="navButton">Project Dashboard</Link>
+                <button className="logOut" onClick={handleLogout}>Log Out</button>
+            </div>
         </div>
     )
 }

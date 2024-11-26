@@ -6,7 +6,7 @@ import Link from 'next/link'
 
 export default function Page() {
     // this component is the user login page
-    const [username, setUsername] = useState("Username");
+    const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
 
     const router = useRouter()
@@ -23,7 +23,7 @@ export default function Page() {
         const loginHeader = new Headers();
         loginHeader.append("Content-Type", "application/json");
 
-        const loginRequest = new Request("https://exquisite-vision-production.up.railway.app/auth/login", {
+        const loginRequest = new Request("https://capstone-deploy-production.up.railway.app/auth/login", {
             method: "POST",
             credentials: "include",
             body: JSON.stringify(userData),
@@ -47,15 +47,18 @@ export default function Page() {
     <div className="Login">
         <h1 className="websiteHeader">Citizen Science App</h1>
         <form onSubmit={handleSubmit} className='loginForm'>
-            <label>Username:
-                <input type="text" value={username} onChange={(e) => setUsername(e.target.value)}></input>
+            <h3>Account Login</h3>
+            <label className="inputLabel">Username 
+                <input className="inputBox" type="text" value={username} onChange={(e) => setUsername(e.target.value)}></input>
             </label>
-            <label>
-                Password:
-                <input type="password" value={password} onChange={(e) => setPassword(e.target.value)}></input>
+            <label className="inputLabel">
+                Password 
+                <input className="inputBox" type="password" value={password} onChange={(e) => setPassword(e.target.value)}></input>
             </label>
-            <input className="submitButton" type="submit"></input>
-            <Link href="/login/register" className="registerButton">Not a member? Register here!</Link>
+            <button className="submitButton" type="submit">
+                Submit
+            </button>
+            <p>Not a member yet?  <Link href="/login/register" className="registerButton">Register here</Link></p>
         </form>
     </div>
     )
