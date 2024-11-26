@@ -3,13 +3,21 @@
     --background-color: #dcd5be;
     --lesser-accent: #af9f6a;
     --site-font: Arial, Helvetica, sans-serif;
+    --hover: #ffffff;
     --header-size: 50px;
     --site-font-size: 15px;
+
 }
 
 body {
     background-color: var(--background-color);
     font-family: var(--site-font);
+}
+
+h1 {
+    font-size: 40px;
+    text-align: center;
+    margin: 20px;
 }
 
 form {
@@ -143,7 +151,7 @@ li {
 }
 
 .newProjectButton:hover {
-    background-color: var(--background-color);
+    background-color: var(--hover);
 }
 
 .projectCard {
@@ -163,6 +171,7 @@ li {
 
 .projectTitle {
     font-weight: bold;
+    padding-top: 70px;
 }
 
 .projectButton {
@@ -170,10 +179,12 @@ li {
     margin: 2px;
     background-color: var(--lesser-accent);
     padding: 10px 20px;
+    margin-top: 10px;
+    margin-bottom: 30px;
 }
 
 .projectButton:hover {
-    background-color: var(--background-color);
+    background-color: var(--hover);
 }
 
 /* project details page */
@@ -194,4 +205,18 @@ li {
 
 .projectDetails > button:hover {
     background-color: var(--background-color);
+}
+
+/* chart */
+.chart-container {
+    width: 80%; 
+    max-width: 800px; 
+    margin: 20px auto; 
+    padding: 20px;
+    text-align: center;
+}
+
+.chart-container canvas {
+    width: 100% !important; 
+    height: 30% !important;
 }

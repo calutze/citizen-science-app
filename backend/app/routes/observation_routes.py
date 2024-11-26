@@ -13,6 +13,7 @@ from app.models.projects import Project
 from app.models.forms import FormField
 from app.models.observations import Observation, ObservationValue
 from app.services.validation import validate_observation
+from flask_login import login_required, current_user
 
 observation = Blueprint('observation', __name__)
 
@@ -139,3 +140,33 @@ def delete_observation(observation_id):
     except Exception:
         db.session.rollback()
         abort(500, description="Internal server error while deleting observation.")
+
+
+@observation.route('/user-projects-with-observations', methods=['GET'])
+@login_required
+def get_projects_with_observations():
+    """ Gets all projects for the current user and their associated observations. """
+    try:
+
+        projects = Project.query.filter_by(created_by=current_user.user_id).all()
+
+        # creates response with projects and associated observations
+        projects_with_observations = []
+        for project in projects:
+            observations = Observation.query.filter_by(project=project.project_id).all()
+            observations_data = [
+                {
+                    **obs.to_dict(),
+                    'values': [val.to_dict() for val in obs.observation_values]
+                } for obs in observations
+            ]
+
+            project_data = project.to_dict()
+            project_data['observations'] = observations_data
+            projects_with_observations.append(project_data)
+
+        return jsonify({'success': True, 'projects': projects_with_observations}), 200
+
+    except Exception as e:
+        print(f"Error fetching projects with observations: {e}")
+        return jsonify({'error': 'An error occurred while fetching projects and observations.'}), 500
