@@ -5,10 +5,10 @@ import {useRouter} from 'next/navigation'
 
 export default function Page() {
     const [projectData, setProjectData] = useState({
-        project_code: "UNIQUE CODE",
-        title: "Test Project",
-        description: "Description goes here",
-        instructions: "Project instructions"
+        project_code: "",
+        title: "",
+        description: "",
+        instructions: ""
     })
 
     const router = useRouter()
@@ -43,23 +43,27 @@ export default function Page() {
     return (
         <div className="newProject">
             <form onSubmit={createProject}>
-                <label>
-                    project_code:
-                    <input type="text" name="" value={projectData.project_code} onChange={(e) => setProjectData({...projectData, project_code: e.target.value})} required/>
+            <h2>Create A New Project</h2>
+            <p style={{ textAlign: "center" }}>Please fill out the form below to complete your new project.</p>
+                <label className="inputLabel">
+                    Project Code
+                    <input className="inputBox" type="text" name="" value={projectData.project_code} onChange={(e) => setProjectData({...projectData, project_code: e.target.value})} required/>
                 </label>
-                <label>
-                    title:
-                    <input type="text" name="" value={projectData.title} onChange={(e) => setProjectData({...projectData, title: e.target.value})} required/>
+                <label className="inputLabel">
+                    Project Title
+                    <input className="inputBox" type="text" name="" value={projectData.title} onChange={(e) => setProjectData({...projectData, title: e.target.value})} required/>
                 </label>
-                <label>
-                    description:
-                    <input type="text" name="" value={projectData.description} onChange={(e) => setProjectData({...projectData, description: e.target.value})} required/>
+                <label className="inputLabel">
+                    Project Description
+                    <input className="inputBox" type="text" name="" value={projectData.description} onChange={(e) => setProjectData({...projectData, description: e.target.value})} required/>
                 </label>
-                <label>
-                    instructions:
-                    <input type="text" name="" value={projectData.instructions} onChange={(e) => setProjectData({...projectData, instructions: e.target.value})} required/>
+                <label className="inputLabel">
+                    Instructions
+                    <input className="inputBox" type="text" name="" value={projectData.instructions} onChange={(e) => setProjectData({...projectData, instructions: e.target.value})} required/>
                 </label>
-                <input className="submitButton" type="submit" />
+                <button className="submitButton" type="submit">
+                Submit
+                </button>
             </form>
         </div>
     )

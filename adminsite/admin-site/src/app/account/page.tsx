@@ -83,19 +83,16 @@ export default function Page() {
 
     return (
     <div className="accountPage">
-        <h1>Dashboard</h1>
-        <br/>
+        <h1>Projects Dashboard</h1>
+        <h4>Manage all your projects here.</h4>
+
         <div className='chartSection'>
-            <h2>Observations per Project</h2>
             <ChartComponent />
         </div>
         <br/>
-        <h2>Projects</h2>
+        {/* <h2>Projects</h2> */}
         <Link href="/account/create" className= "newProjectButton">Create New Project</Link>
-        <br/>
-        <div className="projectList" id="projectList">
-
-        </div>
+        <div className="projectList" id="projectList"></div>
     </div>
     )
 }

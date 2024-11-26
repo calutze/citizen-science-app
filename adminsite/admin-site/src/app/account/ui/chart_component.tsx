@@ -3,7 +3,7 @@
 import React, { useRef, useEffect } from 'react';
 import { Chart, registerables } from 'chart.js';
 
-// Register Chart.js components
+// register Chart.js components
 Chart.register(...registerables);
 
 const ChartComponent = () => {
@@ -66,7 +66,7 @@ const ChartComponent = () => {
                                 position: 'bottom',
                             },
                             title: {
-                                display: false,
+                                display: true,
                                 text: 'Observations per Project',
                             },
                         },

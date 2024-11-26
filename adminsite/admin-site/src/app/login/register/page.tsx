@@ -6,9 +6,9 @@ import { useRouter } from 'next/navigation'
 export default function Register() {
     // This component is the registration form for new users
     const [registerData, setRegisterData] = useState({
-        username: "username",
-        password: "password",
-        email: "email@email.com",
+        username: "",
+        password: "",
+        email: "",
         first_name: "",
         last_name: "",
         school: ""
@@ -44,34 +44,38 @@ export default function Register() {
     }
 
     return (
-    <div className='register'>
+    <div>
         <h1 className="websiteHeader">Citizen Science App</h1>
         <form onSubmit={handleSubmit}>
-            <label>
-                Username:
-                <input type="text" name="username" value={registerData.username} onChange={(e) => setRegisterData({...registerData, username: e.target.value})} required />
+            <h3>Create Your Account</h3>
+            <p>Please fill out the form below to complete your registration.</p>
+            <label className='inputLabel'>
+                Username
+                <input className='inputBox' type="text" name="username" value={registerData.username} onChange={(e) => setRegisterData({...registerData, username: e.target.value})} required />
             </label>
-            <label>
-                Password:
-                <input type="password" name="password" value={registerData.password} onChange={(e) => setRegisterData({...registerData, password: e.target.value})} required />
+            <label className='inputLabel'>
+                Password
+                <input className='inputBox' type="password" name="password" value={registerData.password} onChange={(e) => setRegisterData({...registerData, password: e.target.value})} required />
             </label>
-            <label>
-                Email:
-                <input type="email" name="email" value={registerData.email} onChange={(e) => setRegisterData({...registerData, email: e.target.value})} required />
+            <label className='inputLabel'>
+                Email
+                <input className='inputBox' type="email" name="email" value={registerData.email} onChange={(e) => setRegisterData({...registerData, email: e.target.value})} required />
             </label>
-            <label>
-                First Name &#40;optional&#41;:
-                <input type="text" name="first_name" value={registerData.first_name} onChange={(e) => setRegisterData({...registerData, first_name: e.target.value})} />
+            <label className='inputLabel'>
+                First Name
+                <input className='inputBox' type="text" name="first_name" value={registerData.first_name} onChange={(e) => setRegisterData({...registerData, first_name: e.target.value})} />
             </label>
-            <label>
-                Last Name &#40;optional&#41;:
-                <input type="text" name="last_name" value={registerData.last_name} onChange={(e) => setRegisterData({...registerData, last_name: e.target.value})} />
+            <label className='inputLabel'>
+                Last Name 
+                <input className='inputBox' type="text" name="last_name" value={registerData.last_name} onChange={(e) => setRegisterData({...registerData, last_name: e.target.value})} />
             </label>
-            <label>
-                School &#40;optional&#41;:
-                <input type="text" name="school" value={registerData.school} onChange={(e) => setRegisterData({...registerData, school: e.target.value})} />
+            <label className='inputLabel'>
+                School &#40;optional&#41;
+                <input className='inputBox' type="text" name="school" value={registerData.school} onChange={(e) => setRegisterData({...registerData, school: e.target.value})} />
             </label>
-            <input className="submitButton" type="submit" />
+            <button className="submitButton" type="submit">
+                Submit
+            </button>
         </form>
     </div>
     )

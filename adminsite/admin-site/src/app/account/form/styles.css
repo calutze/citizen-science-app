@@ -1,0 +1,106 @@
+/* form builder styles */
+.form-builder {
+    width: 90%;
+    max-width: 800px;
+    margin: 30px auto;
+    padding: 20px;
+    background-color: var(--lesser-accent);
+    border: 1px solid var(--shadow);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px var(--shadow);
+    font-family: var(--site-font);
+}
+
+.form-builder h1 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: var(--accent-color);
+    text-align: center;
+}
+
+.form-builder div {
+    margin-bottom: 20px;
+}
+
+.form-builder label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #444;
+}
+
+.form-builder input {
+    width: 97%;
+}
+
+
+.form-builder select {
+    width: 100%;
+}
+
+.form-builder input, .form-builder select {
+    padding: 10px;
+    border: 1px solid var(--shadow);
+    border-radius: 5px;
+    background-color: #fff;
+    box-shadow: inset 0 2px 4px var(--shadow);
+    font-size: 1rem;
+    font-family: var(--site-font);
+}
+
+.form-builder input[type="checkbox"] {
+    width: auto;
+    margin-right: 10px;
+}
+
+.form-builder button {
+    padding: 10px 15px;
+    font-size: 1rem;
+    background-color: var(--accent-color);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.form-builder button:hover {
+    background-color: #10412a;
+    transform: scale(1.05);
+}
+
+.form-builder .field-actions {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.field-actions button {
+    background-color: var(--accent-color);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.3s ease;
+}
+
+.field-actions button:hover {
+    background-color: #10412a;
+}
+
+.field-container {
+    margin-bottom: 20px;
+    padding: 15px;
+    border: 1px solid var(--shadow);
+    border-radius: 10px;
+    background-color: white;
+    box-shadow: 0 4px 8px var(--shadow);
+}
+
+.field-container h3 {
+    font-size: 1.2rem;
+    color: var(--accent-color);
+    margin-bottom: 10px;
+}
