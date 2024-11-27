@@ -1,12 +1,14 @@
 'use client';
 
-import { useSearchParams } from 'next/navigation'
+import { useSearchParams, useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 import Link from 'next/link'
 
 export default function Project() {
     const searchParams = useSearchParams()
     const chosen_project = searchParams.get('project_id')
+
+    const router = useRouter()
 
     async function getProject() {
         // make the request
@@ -28,7 +30,7 @@ export default function Project() {
                 // grab the information
                 let projectGrabbed = await projectResponse.json()
                 projectGrabbed = projectGrabbed.project
-                // put the information in the ptags
+                // put the information in the p tags
                 const numberP = document.getElementById('number')
                 const titleP = document.getElementById('title')
                 const descriptionP = document.getElementById('description')
@@ -47,7 +49,74 @@ export default function Project() {
 
     }
 
-    useEffect(() => {getProject()})
+    //TODO: once this call is fixed uncomment call in useEffect currently commented for linter
+
+    /*
+    async function getObservations() {
+        // make header
+        const observationHeader = new Headers();
+        observationHeader.append("Content-Type", "application/json");
+
+        // create request
+        const observationRequest = new Request('https://capstone-deploy-production.up.railway.app/show-observations/' + chosen_project,{
+            method: "GET",
+            credentials: "include",
+            headers: observationHeader
+        })
+
+        // grab the observations
+        try {
+            const observationResponse = await fetch(observationRequest)
+            if (!observationResponse.ok) {
+                throw new Error(`Response status: ${observationResponse.status}}`)
+            } else {
+                //TODO: put the observations on screen
+            }
+        } catch (error: any) {
+            console.error(error.message)
+        }
+    }
+        */
+
+    useEffect(() => {
+        getProject()
+        // getObservations()
+    })
+
+    async function deleteProject() {
+        // deletes current project page
+        const deleteHeader = new Headers();
+        deleteHeader.append("Content-Type", "application/json");
+
+        //create the request
+        const deleteRequest = new Request('https://capstone-deploy-production.up.railway.app/delete-project/' + chosen_project, {
+            method: "DELETE",
+            credentials: "include",
+            headers: deleteHeader
+        })
+
+        //delete the project
+        try {
+            const deleteResponse = await fetch(deleteRequest)
+            if (!deleteResponse.ok) {
+                throw new Error(`Response status: ${deleteResponse.status}`)
+            } else {
+                // if successful navigate back to project list page
+                router.push('/account')
+            }
+        } catch (error: any) {
+            console.error(error.message)
+        }
+    }
+
+    function deleteConfirm() {
+        // changed the button to a confirmation and changes the onclick function to delete project
+        const deleteButton = document.getElementById('deleteProject');
+        if (deleteButton) {
+            deleteButton.innerHTML = "Click again to confirm"
+            deleteButton.onclick = deleteProject
+        }
+    }
 
     return (
         chosen_project ? (
@@ -62,6 +131,14 @@ export default function Project() {
                     <Link href={{ pathname: "/account/form",
                         query: { project_id: Number(chosen_project) }
                     }}><button className="projectButton">Create an Observation Form</button></Link>
+
+                    <Link href={{ 
+                        pathname: '/account/edit',
+                        query: {project_id: Number(chosen_project)}
+                        }}>
+                    <button className="projectButton">Edit Project</button></Link>
+
+                    <button id="deleteProject" className="projectButton" onClick={deleteConfirm}>Delete Project</button>
                 </div>
             </div>
         ) : (

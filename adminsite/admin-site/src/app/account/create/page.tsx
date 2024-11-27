@@ -31,6 +31,12 @@ export default function Page() {
         try {
             const createProjectResponse = await fetch(createProjectRequest);
             if (!createProjectResponse.ok) {
+                if (createProjectResponse.status === 500) {
+                    const codeMatch = document.getElementById('codeMatch')
+                    if (codeMatch) {
+                        codeMatch.style.display = 'block'
+                    }
+                }
                 throw new Error(`Response status: ${createProjectResponse.status}`);
             } else {
                 router.push('/account')
@@ -61,6 +67,7 @@ export default function Page() {
                     Instructions
                     <input className="inputBox" type="text" name="" value={projectData.instructions} onChange={(e) => setProjectData({...projectData, instructions: e.target.value})} required/>
                 </label>
+                <p id="codeMatch" style={{display: 'none'}}>Project code must be unique.</p>
                 <button className="submitButton" type="submit">
                 Submit
                 </button>
