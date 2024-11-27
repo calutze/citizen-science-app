@@ -90,7 +90,6 @@ export default function Page() {
             <ChartComponent />
         </div>
         <br/>
-        {/* <h2>Projects</h2> */}
         <Link href="/account/create" className= "newProjectButton">Create New Project</Link>
         <div className="projectList" id="projectList"></div>
     </div>

@@ -32,7 +32,7 @@ export default function Navbar() {
 
     return (
         <div className="navbar">
-            <p>Citizen Science App</p>
+            <Link href="/" className="navButton">Citizen Science App</Link>
             <div className="navbar-actions">
                 <Link href="/account" className="navButton">Project Dashboard</Link>
                 <button className="logOut" onClick={handleLogout}>Log Out</button>

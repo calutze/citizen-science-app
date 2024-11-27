@@ -18,14 +18,9 @@ from flask_login import login_required, current_user
 observation = Blueprint('observation', __name__)
 
 
-@observation.route('/show-observations', methods=['GET'])
-def show_observations():
-    """ Returns JSON response with observations for
-        the project_id currently stored in the session. """
-    project_id = session.get('project_id')
-
-    if not project_id:
-        return jsonify({"error": "No active project session found"}), 401
+@observation.route('/show-observations/<int:project_id>', methods=['GET'])
+def show_observations(project_id):
+    """ Returns JSON response with observations for the given project_id """
 
     project = Project.query.get(project_id)
     if not project:

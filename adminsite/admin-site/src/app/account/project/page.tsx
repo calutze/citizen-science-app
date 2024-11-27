@@ -1,14 +1,18 @@
 'use client';
 
 import { useSearchParams, useRouter } from 'next/navigation'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import DisplayObservations from '../ui/display_observations_component';
+
 
 export default function Project() {
     const searchParams = useSearchParams()
     const chosen_project = searchParams.get('project_id')
 
     const router = useRouter()
+
+    const [observations, setObservations] = useState([])
 
     async function getProject() {
         // make the request
@@ -37,10 +41,10 @@ export default function Project() {
                 const instructionsP = document.getElementById('instructions')
 
                 if (numberP && titleP && descriptionP && instructionsP) {
-                    numberP.innerHTML = "Project Number: " + projectGrabbed.project_code
                     titleP.innerHTML = projectGrabbed.title
-                    descriptionP.innerHTML ="Description: " + projectGrabbed.description
-                    instructionsP.innerHTML = "Instructions: " + projectGrabbed.instructions
+                    numberP.innerHTML = "<span style='font-weight: bold;'>Project Number:</span> " + projectGrabbed.project_code
+                    descriptionP.innerHTML ="<span style='font-weight: bold;'>Description:</span> " + projectGrabbed.description
+                    instructionsP.innerHTML = "<span style='font-weight: bold;'>Instructions:</span>  " + projectGrabbed.instructions
                 }
             }
         } catch (error: any) {
@@ -51,7 +55,6 @@ export default function Project() {
 
     //TODO: once this call is fixed uncomment call in useEffect currently commented for linter
 
-    /*
     async function getObservations() {
         // make header
         const observationHeader = new Headers();
@@ -70,17 +73,19 @@ export default function Project() {
             if (!observationResponse.ok) {
                 throw new Error(`Response status: ${observationResponse.status}}`)
             } else {
-                //TODO: put the observations on screen
+                // displays observations
+                const data = await observationResponse.json()
+                setObservations(data.observations)
             }
         } catch (error: any) {
             console.error(error.message)
         }
     }
-        */
+
 
     useEffect(() => {
         getProject()
-        // getObservations()
+        getObservations()
     })
 
     async function deleteProject() {
@@ -123,8 +128,8 @@ export default function Project() {
             <div className="projectDetails">
                 <h2>Project Details</h2>
                 <div className="container">
-                    <p style={{ fontWeight: "bold" }}id='number'>Project Number:</p>
-                    <p id='title'></p>
+                    <h3 id='title'></h3>
+                    <p id='number'>Project Number:</p>
                     <p id='description'></p>
                     <p id='instructions'></p>
                     
@@ -140,6 +145,9 @@ export default function Project() {
 
                     <button id="deleteProject" className="projectButton" onClick={deleteConfirm}>Delete Project</button>
                 </div>
+
+                <DisplayObservations observations={observations} />
+
             </div>
         ) : (
             <p>Oops! Did you pick a project from the list?</p>

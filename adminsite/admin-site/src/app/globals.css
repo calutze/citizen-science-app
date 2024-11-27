@@ -155,9 +155,8 @@ form:hover {
     line-height: 1;
 }
 
-
 .navButton:hover {
-    background-color: #10412a;
+    color: #c4c5c4;
 }
 
 .navbar button {
@@ -178,7 +177,7 @@ form:hover {
     line-height: 1;
 }
 .navbar button:hover {
-    background-color: #10412a;
+    color: #c4c5c4;
 }
 
 
@@ -285,6 +284,7 @@ form:hover {
     color: white;
     border: none;
     padding: 10px 15px;
+    margin: 10px;
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
@@ -317,10 +317,57 @@ form:hover {
     border: 1px solid var(--shadow);
     border-radius: 10px;
     box-shadow: 0 4px 8px var(--shadow);
+    transition: none;
+    position: relative;
 }
 
 /* fixes responsive issues */
 .chart-container canvas {
     width: 100% !important; 
     height: 30% !important;
+}
+
+/* observations container */
+.observations {
+    margin-top: 20px;
+    padding: 20px;
+    border: 1px solid var(--shadow);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px var(--shadow);
+    font-family: var(--site-font);
+}
+
+/* observation table  */
+.observations-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: white;
+    text-align: left;
+    box-shadow: 0 4px 8px var(--shadow);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.observations-table th, .observations-table td {
+    padding: 15px;
+    border: 1px solid var(--shadow);
+    vertical-align: top;
+}
+
+.observations-table th {
+    background-color: var(--accent-color);
+    color: white;
+    font-weight: bold;
+    text-align: center;
+}
+
+.observations-table tr:nth-child(even) {
+    background-color: var(--lesser-accent);
+}
+
+.observations-table td {
+    font-size: 0.9rem;
+    color: #555;
+    line-height: 1.5;
 }
