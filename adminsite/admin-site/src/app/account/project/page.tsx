@@ -49,7 +49,9 @@ export default function Project() {
 
     }
 
-    //TODO: once this call is fixed uncomment call in useEffect
+    //TODO: once this call is fixed uncomment call in useEffect currently commented for linter
+
+    /*
     async function getObservations() {
         // make header
         const observationHeader = new Headers();
@@ -74,6 +76,7 @@ export default function Project() {
             console.error(error.message)
         }
     }
+        */
 
     useEffect(() => {
         getProject()
@@ -108,7 +111,7 @@ export default function Project() {
 
     function deleteConfirm() {
         // changed the button to a confirmation and changes the onclick function to delete project
-        let deleteButton = document.getElementById('deleteProject');
+        const deleteButton = document.getElementById('deleteProject');
         if (deleteButton) {
             deleteButton.innerHTML = "Click again to confirm"
             deleteButton.onclick = deleteProject
