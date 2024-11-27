@@ -34,6 +34,12 @@ export default function Page() {
         try {
             const loginResponse = await fetch(loginRequest);
             if (!loginResponse.ok) {
+                if (loginResponse.status === 401) {
+                    const incorrectPass = document.getElementById('incorrectPass')
+                    if (incorrectPass) {
+                        incorrectPass.style.display = 'block'
+                    }
+                }
                 throw new Error(`Response status: ${loginResponse.status}`)
             } else {
                 router.push('/account')
@@ -55,6 +61,7 @@ export default function Page() {
                 Password 
                 <input className="inputBox" type="password" value={password} onChange={(e) => setPassword(e.target.value)}></input>
             </label>
+            <p id="incorrectPass" style={{display: 'none'}}>Username or password are incorrect</p>
             <button className="submitButton" type="submit">
                 Submit
             </button>

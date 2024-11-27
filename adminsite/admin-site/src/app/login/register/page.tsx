@@ -14,6 +14,8 @@ export default function Register() {
         school: ""
     })
 
+    const [passwordConfirm, setPasswordConfirm] = useState("");
+
     const router = useRouter()
 
     async function handleSubmit(event: any) {
@@ -34,6 +36,14 @@ export default function Register() {
         try {
             const registerResponse = await fetch(registerRequest);
             if (!registerResponse.ok) {
+                if (registerResponse.status === 409) {
+                    const passMatch = document.getElementById('passMatch')
+                    const userExist = document.getElementById('userExist')
+                    if (passMatch && userExist) {
+                        passMatch.style.display = 'none'
+                        userExist.style.display = 'block'
+                    }
+                }
                 throw new Error(`Response status: ${registerResponse.status}`);
             } else {
                 router.push('/login')
@@ -43,10 +53,28 @@ export default function Register() {
         }
     }
 
+    function checkPasswords(event: any) {
+        // stop refresh
+        event.preventDefault()
+
+        // check if passwords match
+        if (registerData.password !== passwordConfirm) {
+            const passMatch = document.getElementById('passMatch')
+            const userExist = document.getElementById('userExist')
+            if (passMatch && userExist) {
+                passMatch.style.display = 'block'
+                userExist.style.display = 'none'
+            }
+            return
+        } else {
+            handleSubmit(event)
+        }
+    }
+
     return (
     <div>
         <h1 className="websiteHeader">Citizen Science App</h1>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={checkPasswords}>
             <h3>Create Your Account</h3>
             <p>Please fill out the form below to complete your registration.</p>
             <label className='inputLabel'>
@@ -56,6 +84,10 @@ export default function Register() {
             <label className='inputLabel'>
                 Password
                 <input className='inputBox' type="password" name="password" value={registerData.password} onChange={(e) => setRegisterData({...registerData, password: e.target.value})} required />
+            </label>
+            <label className='inputLabel'>
+                Password
+                <input className='inputBox' type="password" name="passwordConfirm" value={passwordConfirm} onChange={(e) => setPasswordConfirm(e.target.value)}required />
             </label>
             <label className='inputLabel'>
                 Email
@@ -73,6 +105,8 @@ export default function Register() {
                 School &#40;optional&#41;
                 <input className='inputBox' type="text" name="school" value={registerData.school} onChange={(e) => setRegisterData({...registerData, school: e.target.value})} />
             </label>
+            <p id="passMatch" style={{display: 'none'}}>Passwords do not match</p>
+            <p id="userExist" style={{display: 'none'}}>User already exists</p>
             <button className="submitButton" type="submit">
                 Submit
             </button>
