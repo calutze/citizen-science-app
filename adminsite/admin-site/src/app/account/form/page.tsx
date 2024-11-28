@@ -60,7 +60,6 @@ export default function Page() {
     // grab the form
     try {
         const formResponse = await fetch(formRequest)
-        console.log(formResponse.status)
         if (!formResponse.ok) {
             throw new Error(`Response status: ${formResponse.status}}`)
         } else {

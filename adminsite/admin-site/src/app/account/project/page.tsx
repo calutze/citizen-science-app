@@ -69,7 +69,6 @@ export default function Project() {
         // grab the form
         try {
             const formResponse = await fetch(formRequest)
-            console.log(formResponse.status)
             if (!formResponse.ok) {
                 if (formResponse.status === 404) {
                     setHasForm(false);
