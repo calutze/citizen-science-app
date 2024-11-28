@@ -1,6 +1,6 @@
 import { Image, StyleSheet, TextInput, Text, Button } from "react-native";
 import { View } from "react-native";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link, router, useRouter } from "expo-router";
 import { useProject } from "./ProjectContext";
 import { API_URL } from "@/constants/api";
@@ -15,18 +15,13 @@ export default function HomeScreen() {
   const router = useRouter();
   // const navigation = useNavigation();
 
-  useEffect(() => {
-    if (projectError) {
-      setError(projectError);
-    }
-  }, [projectError]);
-
   return (
     // organize and structure student mobile landing page with text input for project code (TextInput)
     <View style={[styles.homeContainer]}>
       <Text style={styles.header}>Citizen Science App</Text>
       <Text>Student Project Code:</Text>
       {error && <Text style={styles.error}>{error}</Text>}
+      {projectError && <Text style={styles.error}>{projectError}</Text>}
       <TextInput
         style={styles.input}
         onChangeText={onChangeProjectCode}
