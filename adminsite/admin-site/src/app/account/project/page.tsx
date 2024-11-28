@@ -13,6 +13,7 @@ export default function Project() {
     const router = useRouter()
 
     const [observations, setObservations] = useState([])
+    const [hasForm, setHasForm] = useState(true)
 
     async function getProject() {
         // make the request
@@ -53,6 +54,36 @@ export default function Project() {
 
     }
 
+    async function getForm() {
+        // make header
+        const formHeader = new Headers();
+        formHeader.append("Content-Type", "application/json");
+
+        // create request
+        const formRequest = new Request('https://capstone-deploy-production.up.railway.app/form/' + chosen_project,{
+            method: "GET",
+            credentials: "include",
+            headers: formHeader
+        })
+
+        // grab the form
+        try {
+            const formResponse = await fetch(formRequest)
+            if (!formResponse.ok) {
+                if (formResponse.status === 404) {
+                    setHasForm(false);
+                } else {
+                    throw new Error(`Response status: ${formResponse.status}}`)
+                }
+            } else {
+                // displays form
+                const form_data = await formResponse.json()
+            }
+        } catch (error: any) {
+            console.error(error.message)
+        }
+    }
+
     //TODO: once this call is fixed uncomment call in useEffect currently commented for linter
 
     async function getObservations() {
@@ -82,11 +113,11 @@ export default function Project() {
         }
     }
 
-
     useEffect(() => {
         getProject()
         getObservations()
-    })
+        getForm()
+    }, [])
 
     async function deleteProject() {
         // deletes current project page
@@ -132,11 +163,14 @@ export default function Project() {
                     <p id='number'>Project Number:</p>
                     <p id='description'></p>
                     <p id='instructions'></p>
-                    
-                    <Link href={{ pathname: "/account/form",
-                        query: { project_id: Number(chosen_project) }
-                    }}><button className="projectButton">Create an Observation Form</button></Link>
-
+                    { hasForm
+                        ? <Link href={{ pathname: "/account/form",
+                            query: { project_id: Number(chosen_project), edit: true }
+                        }}><button className="projectButton">Edit Observation Form</button></Link>
+                        : <Link href={{ pathname: "/account/form",
+                            query: { project_id: Number(chosen_project), edit: false }
+                        }}><button className="projectButton">Create Observation Form</button></Link>
+                    }
                     <Link href={{ 
                         pathname: '/account/edit',
                         query: {project_id: Number(chosen_project)}
