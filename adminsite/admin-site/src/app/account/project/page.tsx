@@ -6,7 +6,6 @@ import Link from 'next/link'
 import DisplayObservations from '../ui/display_observations_component';
 import { API_URL } from '@/constants/api';
 
-
 export default function Project() {
     const searchParams = useSearchParams()
     const chosen_project = searchParams.get('project_id')

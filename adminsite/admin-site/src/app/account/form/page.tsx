@@ -1,7 +1,12 @@
 'use client';
 
+<<<<<<< HEAD
 import { useEffect, useState } from "react";
 import { useSearchParams } from 'next/navigation'
+=======
+import { useState } from "react";
+import { useSearchParams, useRouter } from 'next/navigation'
+>>>>>>> Reroute back to account after form submittal
 import { Trash2, Plus, MoveUp, MoveDown } from 'lucide-react';
 import "./styles.css";
 import { API_URL } from '@/constants/api';
@@ -31,6 +36,7 @@ interface FormTemplate {
 export default function Page() {
   const [formFields, setFormFields] = useState<FormField[]>([]);
   const [formTitle, setFormTitle] = useState('');
+  const router = useRouter()
   const searchParams = useSearchParams();
   const selected_project = Number(searchParams.get('project_id'));
   const existing_form = Boolean(searchParams.get('edit'));
@@ -158,6 +164,7 @@ export default function Page() {
         const data = await response.json();
         console.log('Form submitted successfully');
         console.log(data);
+        router.push('/account')
       }
     }
     catch (error: any) {
