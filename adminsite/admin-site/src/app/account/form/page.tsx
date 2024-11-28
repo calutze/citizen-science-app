@@ -1,9 +1,10 @@
 'use client';
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSearchParams } from 'next/navigation'
 import { Trash2, Plus, MoveUp, MoveDown } from 'lucide-react';
 import "./styles.css";
+import { get } from "http";
 
 // Type definition for FormField, matches backend Model
 interface FormField {
@@ -32,6 +33,7 @@ export default function Page() {
   const [formTitle, setFormTitle] = useState('');
   const searchParams = useSearchParams();
   const selected_project = Number(searchParams.get('project_id'));
+  const existing_form = Boolean(searchParams.get('edit'));
 
   const fieldTypes = [
     'text',
@@ -43,6 +45,35 @@ export default function Page() {
   //TODO: Check if existing form for this project id exists
     //If existing form then route to edit form page
     //If no existing form then route to create form page
+  async function getForm() {
+    // make header
+    const formHeader = new Headers();
+    formHeader.append("Content-Type", "application/json");
+
+    // create request
+    const formRequest = new Request('https://capstone-deploy-production.up.railway.app/form/' + selected_project,{
+        method: "GET",
+        credentials: "include",
+        headers: formHeader
+    })
+
+    // grab the form
+    try {
+        const formResponse = await fetch(formRequest)
+        console.log(formResponse.status)
+        if (!formResponse.ok) {
+            throw new Error(`Response status: ${formResponse.status}}`)
+        } else {
+            // displays form
+            const form_data = await formResponse.json()
+            setFormFields(form_data.fields)
+        }
+    } catch (error: any) {
+        console.error(error.message)
+    }
+  }
+
+  useEffect(() => {getForm()}, []);
 
   // Add a new field to the form builder
   function addField() {
@@ -92,18 +123,32 @@ export default function Page() {
     const formHeader = new Headers();
     formHeader.append('Content-Type', 'application/json');
 
-    const template: FormTemplate = {
+    const new_form: FormTemplate = {
         project_id: selected_project,
         description: formTitle,
         fields: formFields
     }
 
-    const formRequest = new Request("https://capstone-deploy-production.up.railway.app/add-form", {
-      method: 'POST',
-      credentials: 'include',
-      headers: formHeader,
-      body: JSON.stringify(template, null, 2)
+    const edit_form = {
+      description: formTitle,
+      fields: formFields
+    }
+
+    let formRequest: Request;
+    if (existing_form) {
+      formRequest = new Request(`https://capstone-deploy-production.up.railway.app/update-form/${selected_project}`, {
+        method: 'PUT',
+        credentials: 'include',
+        headers: formHeader,
+        body: JSON.stringify(edit_form, null, 2)
     })
+    } else {
+      formRequest = new Request("https://capstone-deploy-production.up.railway.app/add-form", {
+        method: 'POST',
+        credentials: 'include',
+        headers: formHeader,
+        body: JSON.stringify(new_form, null, 2)
+    })}
 
     try {
       const response = await fetch(formRequest);
