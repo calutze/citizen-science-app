@@ -1,9 +1,7 @@
-import { Image, StyleSheet, TextInput, Text, Button } from "react-native";
-import { View } from "react-native";
+import { Image, StyleSheet, TextInput, Text, Button, View } from "react-native";
 import { useState } from "react";
-import { Link, router, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import { useProject } from "./ProjectContext";
-import { API_URL } from "@/constants/api";
 // import { useNavigation } from "@react-navigation/native";
 
 // Create a HomeScreen component for student mobile landing page

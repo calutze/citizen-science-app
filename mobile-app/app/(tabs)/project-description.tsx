@@ -1,7 +1,6 @@
-import { Image, StyleSheet, Text } from "react-native";
+import { StyleSheet, Text } from "react-native";
 import { View } from "react-native";
 import { useEffect, useState } from "react";
-import { useLocalSearchParams, router } from "expo-router";
 import { useProject } from "../ProjectContext";
 
 // Create a Project Description component for student mobile project description page
