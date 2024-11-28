@@ -42,7 +42,6 @@ export default function ProjectDescription() {
   return (
     <View style={[styles.homeContainer]}>
       <Text style={styles.header}>Citizen Science App</Text>
-      <Text style={styles.header2}>Project Description Page</Text>
       {error && <Text style={styles.error}>{error}</Text>}
       <Text style={styles.text1}>Project Title:</Text>
       <Text>{project && project.title}</Text>
@@ -62,7 +61,7 @@ const styles = StyleSheet.create({
   homeContainer: {
     backgroundColor: "#dcd5be",
     minHeight: "100%",
-    alignItems: "center",
+    //alignItems: "center",
     gap: 10,
   },
   header: {
@@ -76,6 +75,17 @@ const styles = StyleSheet.create({
     fontSize: 25,
     textAlign: "center",
     width: "100%",
+  },
+  header3: {
+    fontSize: 25,
+    textAlign: "left",
+    padding: 10,
+  },
+  paragraph: {
+    fontSize: 14,
+    textAlign: "left",
+    width: "100%",
+    padding: 10,
   },
   main: {
     display: "flex",

@@ -228,7 +228,7 @@ export default function Page() {
               onChange={(e) => updateField(index, 'is_required', e.target.checked)}/>
           </div>
           {/*Options for Select, Radio, Checkbox, only displays if those types*/}
-          {(field.field_type === 'select' || field.field_type === 'radio' || field.field_type === 'checkbox') && (
+          {(field.field_type === 'select' || field.field_type === 'radio') && (
           <div>
             <label>Options (comma-separated)</label>
             <input 

@@ -143,7 +143,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({ formData , onSubmit }) => {
   return (
     <ScrollView>
       <Surface style={styles.container}>
-        <Title style={styles.title}>Sample Form ID: {formData.form_id}</Title>
+        <Title style={styles.title}>{formData.description}</Title>
         {formData.fields.sort(
             (a, b) => a.field_order - b.field_order
           ).map(field => renderFormElement(field))}
@@ -162,6 +162,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
+    backgroundColor: "#dcd5be",
   },
   inputContainer: {
     marginBottom: 16,
@@ -225,7 +226,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   submitButton: {
-    backgroundColor: '#007AFF',
+    backgroundColor: '#a368eb',
     padding: 16,
     borderRadius: 8,
     alignItems: 'center',

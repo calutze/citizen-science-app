@@ -1,4 +1,4 @@
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Text } from "react-native";
 import DynamicForm from "@/components/DynamicForm";
 import { useEffect, useState } from "react";
 import { router } from "expo-router";
@@ -91,7 +91,7 @@ export default function FormScreen() {
     const formHeader = new Headers();
     formHeader.append("Content-Type", "application/json");
     const formRequest = new Request(
-      `https://exquisite-vision-production.up.railway.app/form/${projectId}`,
+      `https://capstone-deploy-production.up.railway.app/form/${projectId}`,
       {
         method: "GET",
         credentials: "include",
@@ -116,7 +116,7 @@ export default function FormScreen() {
     const formHeader = new Headers();
     formHeader.append("Content-Type", "application/json");
     const formRequest = new Request(
-      "https://exquisite-vision-production.up.railway.app/add-observation",
+      "https://capstone-deploy-production.up.railway.app/add-observation",
       {
         method: "POST",
         credentials: "include",
@@ -157,7 +157,8 @@ export default function FormScreen() {
   }
 
   return (
-    <View style={styles.container}>
+    <View>
+      <Text style={styles.header}>Citizen Science App</Text>
       <DynamicForm
         formData={formData || sampleFormData}
         onSubmit={handleSubmit}
@@ -168,7 +169,20 @@ export default function FormScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#dcd5be",
+    minHeight: "100%",
+    alignItems: "center",
+  },
+  header: {
+    backgroundColor: "#a368eb",
+    fontSize: 40,
+    color: "#ffffff",
+    textAlign: "center",
+    width: "100%",
+  },
+  header2: {
+    fontSize: 24,
+    marginBottom: 20,
+    textAlign: 'center',
   },
 });

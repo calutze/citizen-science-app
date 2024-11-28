@@ -1,17 +1,56 @@
 import { Image, StyleSheet, TextInput, Text, Button, View } from "react-native";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "expo-router";
 import { useProject } from "./ProjectContext";
-// import { useNavigation } from "@react-navigation/native";
+import { API_URL } from "../constants/api";
 
 // Create a HomeScreen component for student mobile landing page
 export default function HomeScreen() {
-  // useState Hook for student code input
+  // Hooks for student code input, projectID, errors, and router
   const [projectCode, onChangeProjectCode] = useState("");
   const { setProjectId, error: projectError } = useProject();
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
-  // const navigation = useNavigation();
+
+  // Use /enter-code endpoint to verify student project code and redirect to project page
+  async function enterCode() {
+    try {
+      setError(null);
+      const projectHeader = new Headers();
+      projectHeader.append("Content-Type", "application/json");
+      let projectRequest = new Request(
+        `${API_URL}/enter-code`,
+        {
+          credentials: "include",
+          method: "POST",
+          headers: projectHeader,
+          body: JSON.stringify({ code: projectCode }),
+        }
+      );
+      const response = await fetch(projectRequest);
+
+      if (!response.ok) {
+        setError("That project does not exist.");
+        return;
+      }
+
+      const data = await response.json();
+      console.log(data);
+      setProjectId(data.project_id);
+
+      router.push({
+        pathname: `/(tabs)/project-description`,
+      });
+    } catch (error) {
+      console.error(error);
+      setError("Something went wrong. Please try again.");
+    }}
+
+  useEffect(() => {
+    if (projectError) {
+      setError(projectError);
+    }
+  }, [projectError]);
 
   return (
     // organize and structure student mobile landing page with text input for project code (TextInput)
@@ -19,7 +58,6 @@ export default function HomeScreen() {
       <Text style={styles.header}>Citizen Science App</Text>
       <Text style={styles.text1}>Student Project Code:</Text>
       {error && <Text style={styles.error}>{error}</Text>}
-      {projectError && <Text style={styles.error}>{projectError}</Text>}
       <TextInput
         style={styles.input}
         onChangeText={onChangeProjectCode}
@@ -28,39 +66,7 @@ export default function HomeScreen() {
         keyboardType="default"
       />
       <Button
-        onPress={async () => {
-          try {
-            setError(null);
-            const projectHeader = new Headers();
-            projectHeader.append("Content-Type", "application/json");
-            let projectRequest = new Request(
-              `https://capstone-deploy-production.up.railway.app/enter-code`,
-              {
-                credentials: "include",
-                method: "POST",
-                headers: projectHeader,
-                body: JSON.stringify({ code: projectCode }),
-              }
-            );
-            const response = await fetch(projectRequest);
-
-            if (!response.ok) {
-              setError("That project does not exist.");
-              return;
-            }
-
-            const data = await response.json();
-            console.log(data);
-            setProjectId(data.project_id);
-
-            router.push({
-              pathname: `/(tabs)/project-description`,
-            });
-          } catch (error) {
-            console.error(error);
-            setError("Something went wrong. Please try again.");
-          }
-        }}
+        onPress={enterCode}
         title="Submit"
         color="#a368eb"
       />
@@ -91,6 +97,12 @@ const styles = StyleSheet.create({
     textAlign: "center",
     width: "100%",
   },
+  title: {
+    fontSize: 32,
+    marginTop: 24,
+    marginBottom: 10,
+    textAlign: "center",
+  },
   main: {
     display: "flex",
     flexDirection: "column",
@@ -114,6 +126,7 @@ const styles = StyleSheet.create({
     minWidth: 0,
     maxWidth: 250,
     maxHeight: 250,
+    marginTop: 20
   },
   text1: {
     fontWeight: "bold",

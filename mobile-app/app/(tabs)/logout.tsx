@@ -9,7 +9,7 @@ export default function Logout() {
 
   async function performLogout() {
     const response = await fetch(
-      `https://exquisite-vision-production.up.railway.app/clear-session`,
+      `https://capstone-deploy-production.up.railway.app/clear-session`,
       {
         credentials: "include",
         method: "GET",
