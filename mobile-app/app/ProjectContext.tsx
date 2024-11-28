@@ -25,7 +25,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
   async function checkSession() {
     try {
       const response = await fetch(
-        `https://exquisite-vision-production.up.railway.app/check-session`,
+        `https://capstone-deploy-production.up.railway.app/check-session`,
         {
           credentials: "include",
           method: "GET",

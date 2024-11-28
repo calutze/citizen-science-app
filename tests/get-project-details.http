@@ -1,1 +1,6 @@
-GET https://exquisite-vision-production.up.railway.app/project/22
+GET https://capstone-deploy-production.up.railway.app/enter-code/
+Content-Type: application/json
+
+{
+  "code": "test19"
+}

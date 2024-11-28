@@ -1,4 +1,4 @@
-POST https://exquisite-vision-production.up.railway.app/auth/register
+POST https://capstone-deploy-production.up.railway.app/auth/register
 Content-Type: application/json
 
 {

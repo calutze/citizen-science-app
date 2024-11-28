@@ -1,7 +1,6 @@
-import { Image, StyleSheet, Text } from "react-native";
+import { StyleSheet, Text } from "react-native";
 import { View } from "react-native";
 import { useEffect, useState } from "react";
-import { useLocalSearchParams, router } from "expo-router";
 import { useProject } from "../ProjectContext";
 
 // Create a Project Description component for student mobile project description page
@@ -14,7 +13,7 @@ export default function ProjectDescription() {
   async function getProject(id: string | null) {
     try {
       const response = await fetch(
-        `https://exquisite-vision-production.up.railway.app/project/${id}`,
+        `https://capstone-deploy-production.up.railway.app/project/${id}`,
         {
           credentials: "include",
           method: "GET",
