@@ -1,0 +1,1 @@
+export const API_URL = 'https://capstone-deploy-production.up.railway.app'

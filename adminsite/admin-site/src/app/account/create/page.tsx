@@ -2,6 +2,7 @@
 
 import {useState} from 'react'
 import {useRouter} from 'next/navigation'
+import { API_URL } from '@/constants/api';
 
 export default function Page() {
     const [projectData, setProjectData] = useState({
@@ -21,7 +22,7 @@ export default function Page() {
         const createProjectHeader = new Headers();
         createProjectHeader.append("Content-Type", "application/json");
 
-        const createProjectRequest = new Request("https://capstone-deploy-production.up.railway.app/add-project",{
+        const createProjectRequest = new Request(`${API_URL}/add-project`,{
             method: "POST",
             credentials: "include",
             body: JSON.stringify(projectData),

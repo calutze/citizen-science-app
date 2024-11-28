@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from 'next/navigation'
 import { Trash2, Plus, MoveUp, MoveDown } from 'lucide-react';
 import "./styles.css";
-import { get } from "http";
+import { API_URL } from '@/constants/api';
 
 // Type definition for FormField, matches backend Model
 interface FormField {
@@ -142,7 +142,7 @@ export default function Page() {
         body: JSON.stringify(edit_form, null, 2)
     })
     } else {
-      formRequest = new Request("https://capstone-deploy-production.up.railway.app/add-form", {
+      formRequest = new Request(`${API_URL}/add-form`, {
         method: 'POST',
         credentials: 'include',
         headers: formHeader,

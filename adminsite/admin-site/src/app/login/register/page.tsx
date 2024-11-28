@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { API_URL } from '@/constants/api';
 
 export default function Register() {
     // This component is the registration form for new users
@@ -26,7 +27,7 @@ export default function Register() {
         const registrationHeader = new Headers();
         registrationHeader.append("Content-Type", "application/json");
 
-        const registerRequest = new Request("https://capstone-deploy-production.up.railway.app/auth/register", {
+        const registerRequest = new Request(`${API_URL}/auth/register`, {
             method: "POST",
             body: JSON.stringify(registerData),
             headers: registrationHeader
