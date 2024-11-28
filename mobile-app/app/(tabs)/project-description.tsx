@@ -14,7 +14,7 @@ export default function ProjectDescription() {
   async function getProject(id: string | null) {
     try {
       const response = await fetch(
-        `https://exquisite-vision-production.up.railway.app/project/${id}`,
+        `https://capstone-deploy-production.up.railway.app/project/${id}`,
         {
           credentials: "include",
           method: "GET",

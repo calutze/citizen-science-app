@@ -1,0 +1,11 @@
+POST https://capstone-deploy-production.up.railway.app/auth/register
+Content-Type: application/json
+
+{
+"username": "steve-test",
+"password": "something123",
+"email": "stevetest@oregonstate.edu",
+"first_name": "Steve",
+"last_name": "Test",
+"school": "OSU2"
+}

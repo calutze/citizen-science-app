@@ -41,7 +41,7 @@ export default function HomeScreen() {
             const projectHeader = new Headers();
             projectHeader.append("Content-Type", "application/json");
             let projectRequest = new Request(
-              `https://exquisite-vision-production.up.railway.app/enter-code`,
+              `https://capstone-deploy-production.up.railway.app/enter-code`,
               {
                 credentials: "include",
                 method: "POST",
