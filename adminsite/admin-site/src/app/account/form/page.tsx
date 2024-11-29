@@ -1,12 +1,7 @@
 'use client';
 
-<<<<<<< HEAD
 import { useEffect, useState } from "react";
-import { useSearchParams } from 'next/navigation'
-=======
-import { useState } from "react";
 import { useSearchParams, useRouter } from 'next/navigation'
->>>>>>> Reroute back to account after form submittal
 import { Trash2, Plus, MoveUp, MoveDown } from 'lucide-react';
 import "./styles.css";
 import { API_URL } from '@/constants/api';
