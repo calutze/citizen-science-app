@@ -148,10 +148,7 @@ export default function FormScreen() {
   }, [formData]);
 
   function handleSubmit(values: any) {
-    postForm(values).then((data) => {
-      console.log(data);
-    });
-    // Handle form submission here
+    postForm(values);
     router.push({
       pathname: `/(tabs)/project-description`,
     });
