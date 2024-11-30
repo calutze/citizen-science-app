@@ -43,16 +43,14 @@ export default function Page() {
     'checkbox',
   ]
   
-  //TODO: Check if existing form for this project id exists
-    //If existing form then route to edit form page
-    //If no existing form then route to create form page
+  //Check if existing form for this project id exists
   async function getForm() {
     // make header
     const formHeader = new Headers();
     formHeader.append("Content-Type", "application/json");
 
     // create request
-    const formRequest = new Request('https://capstone-deploy-production.up.railway.app/form/' + selected_project,{
+    const formRequest = new Request(`${API_URL}/form/` + selected_project,{
         method: "GET",
         credentials: "include",
         headers: formHeader
@@ -64,7 +62,7 @@ export default function Page() {
         if (!formResponse.ok) {
             throw new Error(`Response status: ${formResponse.status}}`)
         } else {
-            // displays form
+            // load form data into FormFields for display
             const form_data = await formResponse.json()
             setFormFields(form_data.fields)
         }
@@ -131,12 +129,20 @@ export default function Page() {
 
     const edit_form = {
       description: formTitle,
-      fields: formFields
+      fields: formFields.map(({ field_id, field_description, field_options, field_order, field_title, field_type, is_required }) => ({
+        field_id,
+        field_description,
+        field_options,
+        field_order,
+        field_title,
+        field_type,
+        is_required
+      }))
     }
 
     let formRequest: Request;
     if (existing_form) {
-      formRequest = new Request(`https://capstone-deploy-production.up.railway.app/update-form/${selected_project}`, {
+      formRequest = new Request(`${API_URL}/update-form/${selected_project}`, {
         method: 'PUT',
         credentials: 'include',
         headers: formHeader,
