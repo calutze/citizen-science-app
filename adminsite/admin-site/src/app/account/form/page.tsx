@@ -34,7 +34,7 @@ export default function Page() {
   const router = useRouter()
   const searchParams = useSearchParams();
   const selected_project = Number(searchParams.get('project_id'));
-  const existing_form = Boolean(searchParams.get('edit'));
+  const isExistingForm: Boolean = (searchParams.get('edit') === 'true');
 
   const fieldTypes = [
     'text',
@@ -60,7 +60,11 @@ export default function Page() {
     try {
         const formResponse = await fetch(formRequest)
         if (!formResponse.ok) {
+          if (formResponse.status === 404) {
+            console.log('No form found for this project')
+          } else {
             throw new Error(`Response status: ${formResponse.status}}`)
+          }
         } else {
             // load form data into FormFields for display
             const form_data = await formResponse.json();
@@ -72,7 +76,9 @@ export default function Page() {
     }
   }
 
-  useEffect(() => {getForm()}, []);
+  if (isExistingForm) {
+    useEffect(() => {getForm()}, []);
+  }
 
   // Add a new field to the form builder
   function addField() {
@@ -145,7 +151,7 @@ export default function Page() {
     }
 
     let formRequest: Request;
-    if (existing_form) {
+    if (isExistingForm) {
       formRequest = new Request(`${API_URL}/update-form/${selected_project}`, {
         method: 'PUT',
         credentials: 'include',
