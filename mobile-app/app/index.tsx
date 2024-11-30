@@ -106,6 +106,8 @@ const styles = StyleSheet.create({
     padding: 0,
     maxWidth: 250,
     width: "100%",
+    backgroundColor: "#ffffff",
+    textAlign: "center",
   },
   image: {
     width: "100%",
