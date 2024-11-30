@@ -44,11 +44,11 @@ export default function ProjectDescription() {
       <Text style={styles.header}>Citizen Science App</Text>
       <Text style={styles.header2}>Project Description Page</Text>
       {error && <Text style={styles.error}>{error}</Text>}
-      <Text>Project Title:</Text>
+      <Text style={styles.text1}>Project Title:</Text>
       <Text>{project && project.title}</Text>
-      <Text>Description:</Text>
+      <Text style={styles.text1}>Project Description:</Text>
       <Text>{project && project.description}</Text>
-      <Text>Instructions:</Text>
+      <Text style={styles.text1}> Project Instructions:</Text>
       <Text>{project && project.instructions}</Text>
     </View>
   );
@@ -85,5 +85,8 @@ const styles = StyleSheet.create({
     fontSize: 30,
     gap: 20,
     maxWidth: 400,
+  },
+  text1: {
+    fontWeight: "bold",
   },
 });
