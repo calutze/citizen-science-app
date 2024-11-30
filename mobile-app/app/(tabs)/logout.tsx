@@ -1,6 +1,7 @@
 import { useRouter } from "expo-router";
 import { useEffect } from "react";
 import { useProject } from "../ProjectContext";
+import { API_URL } from "@/constants/api";
 
 // Create a Project Description component for student mobile project description page
 export default function Logout() {
@@ -9,7 +10,7 @@ export default function Logout() {
 
   async function performLogout() {
     const response = await fetch(
-      `https://capstone-deploy-production.up.railway.app/clear-session`,
+      `${API_URL}/clear-session`,
       {
         credentials: "include",
         method: "GET",
@@ -23,7 +24,7 @@ export default function Logout() {
         const data = await response.json();
         console.log(data);
         if (data.success) {
-          setProjectId(null);
+          setProjectId(0);
           router.push({ pathname: `/` });
         }
         return data;

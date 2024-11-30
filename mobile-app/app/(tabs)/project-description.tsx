@@ -2,6 +2,7 @@ import { StyleSheet, Text } from "react-native";
 import { View } from "react-native";
 import { useEffect, useState } from "react";
 import { useProject } from "../ProjectContext";
+import { API_URL } from "@/constants/api";
 
 // Create a Project Description component for student mobile project description page
 export default function ProjectDescription() {
@@ -10,10 +11,10 @@ export default function ProjectDescription() {
   const { projectId } = useProject();
   const [project, setProject] = useState<any | null>(null);
 
-  async function getProject(id: string | null) {
+  async function getProject(id: number | null) {
     try {
       const response = await fetch(
-        `https://capstone-deploy-production.up.railway.app/project/${id}`,
+        `${API_URL}/project/${id}`,
         {
           credentials: "include",
           method: "GET",

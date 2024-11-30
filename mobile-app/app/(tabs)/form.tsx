@@ -3,6 +3,7 @@ import DynamicForm from "@/components/DynamicForm";
 import { useEffect, useState } from "react";
 import { router } from "expo-router";
 import { useProject } from "../ProjectContext";
+import { API_URL } from "@/constants/api";
 
 export default function FormScreen() {
   const sampleFormData = {
@@ -91,7 +92,7 @@ export default function FormScreen() {
     const formHeader = new Headers();
     formHeader.append("Content-Type", "application/json");
     const formRequest = new Request(
-      `https://capstone-deploy-production.up.railway.app/form/${projectId}`,
+      `${API_URL}/form/${projectId}`,
       {
         method: "GET",
         credentials: "include",
@@ -116,7 +117,7 @@ export default function FormScreen() {
     const formHeader = new Headers();
     formHeader.append("Content-Type", "application/json");
     const formRequest = new Request(
-      "https://capstone-deploy-production.up.railway.app/add-observation",
+      `${API_URL}/add-observation`,
       {
         method: "POST",
         credentials: "include",

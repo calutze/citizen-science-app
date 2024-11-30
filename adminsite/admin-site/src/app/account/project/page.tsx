@@ -60,7 +60,7 @@ export default function Project() {
         formHeader.append("Content-Type", "application/json");
 
         // create request
-        const formRequest = new Request('https://capstone-deploy-production.up.railway.app/form/' + chosen_project,{
+        const formRequest = new Request(`${API_URL}/form/` + chosen_project,{
             method: "GET",
             credentials: "include",
             headers: formHeader
