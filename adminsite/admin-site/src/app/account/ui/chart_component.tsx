@@ -2,6 +2,7 @@
 
 import React, { useRef, useEffect } from 'react';
 import { Chart, registerables } from 'chart.js';
+import { API_URL } from '@/constants/api';
 
 // register Chart.js components
 Chart.register(...registerables);
@@ -15,7 +16,7 @@ const ChartComponent = () => {
             try {
                 // fetch projects with observations
                 const response = await fetch(
-                    'https://capstone-deploy-production.up.railway.app/user-projects-with-observations',
+                    `${API_URL}/user-projects-with-observations`,
                     {
                         method: 'GET',
                         credentials: 'include',
