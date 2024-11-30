@@ -63,7 +63,8 @@ export default function Page() {
             throw new Error(`Response status: ${formResponse.status}}`)
         } else {
             // load form data into FormFields for display
-            const form_data = await formResponse.json()
+            const form_data = await formResponse.json();
+            form_data.fields.sort((a: FormField, b: FormField) => a.field_order - b.field_order);
             setFormFields(form_data.fields)
         }
     } catch (error: any) {
@@ -106,13 +107,16 @@ export default function Page() {
   const moveField = (index: number, direction: 'up' | 'down') => {
     if ((direction === 'up' && index === 0) || 
           (direction === 'down' && index === formFields.length -1)) 
-       return;
-
+       return
     const newFields = [...formFields];
     const newIndex = direction === 'up' ? index - 1 : index + 1;
-    const movingField = newFields[index];
-    newFields[index] = newFields[newIndex];
-    newFields[newIndex] = movingField;
+
+    // Swap the two fields
+    [newFields[index], newFields[newIndex]] = [newFields[newIndex], newFields[index]];
+
+    // Update the field_order properties
+    newFields[index].field_order = index;
+    newFields[newIndex].field_order = newIndex;
     setFormFields(newFields);
   };
 
@@ -164,7 +168,6 @@ export default function Page() {
       else {
         const data = await response.json();
         console.log('Form submitted successfully');
-        console.log(data);
         router.push('/account')
       }
     }
