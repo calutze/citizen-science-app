@@ -17,7 +17,7 @@ export default function HomeScreen() {
     // organize and structure student mobile landing page with text input for project code (TextInput)
     <View style={[styles.homeContainer]}>
       <Text style={styles.header}>Citizen Science App</Text>
-      <Text>Student Project Code:</Text>
+      <Text style={styles.text1}>Student Project Code:</Text>
       {error && <Text style={styles.error}>{error}</Text>}
       {projectError && <Text style={styles.error}>{projectError}</Text>}
       <TextInput
@@ -81,6 +81,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#dcd5be",
     minHeight: "100%",
     alignItems: "center",
+    display: "flex",
+    gap: 20,
   },
   header: {
     backgroundColor: "#a368eb",
@@ -95,11 +97,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingTop: 10,
     fontSize: 30,
-    gap: 20,
+    gap: 10,
   },
   input: {
     height: 30,
-    margin: 12,
+    margin: 5,
     borderWidth: 1,
     padding: 0,
     maxWidth: 250,
@@ -110,5 +112,8 @@ const styles = StyleSheet.create({
     minWidth: 0,
     maxWidth: 250,
     maxHeight: 250,
+  },
+  text1: {
+    fontWeight: "bold",
   },
 });
