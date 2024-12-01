@@ -42,17 +42,21 @@ class Observation(db.Model):
         """ Gets observation id. """
         return self.observation_id
 
-    def to_dict(self):
+    def to_dict(self, include_inactive=False):
         """ Converts observation and related values to dictionary format. """
+        values = [
+            value.to_dict()
+            for value in self.observation_values
+            if include_inactive or (value.form_field and value.form_field.is_active)
+        ]
+
         return {
             'observation_id': self.observation_id,
             'created_at': self.created_at.isoformat() if self.created_at else None,
             'student_identifier': self.student_identifier,
             'image_url': self.image_url,
             'project_id': self.project,
-            'observation_values': [
-                value.to_dict() for value in self.observation_values
-            ]
+            'observation_values': values
         }
 
 
@@ -87,6 +91,8 @@ class ObservationValue(db.Model):
         index=True
         )
 
+    form_field = db.relationship('FormField', backref='observation_values', lazy=True)
+
     def get_id(self):
         """ Gets observation value id. """
         return self.observation_value_id
@@ -96,5 +102,5 @@ class ObservationValue(db.Model):
         return {
             'observation_value_id': self.observation_value_id,
             'value': self.value,
-            'field': self.field
+            'form_field': self.form_field.to_dict() if self.form_field else None
         }
