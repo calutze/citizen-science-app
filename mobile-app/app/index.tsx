@@ -4,6 +4,10 @@ import { useRouter } from "expo-router";
 import { useProject } from "./ProjectContext";
 import { API_URL } from "../constants/api";
 
+import { TouchableOpacity } from "react-native";
+
+import globalStyles from "./styles/globalStyles";
+
 // Create a HomeScreen component for student mobile landing page
 export default function HomeScreen() {
   // Hooks for student code input, projectID, errors, and router
@@ -11,38 +15,6 @@ export default function HomeScreen() {
   const { setProjectId, error: projectError } = useProject();
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
-
-  async function checkSession() {
-    try {
-      const response = await fetch(
-        `${API_URL}/check-session`,
-        {
-          credentials: "include",
-          method: "GET",
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error(`Response status: ${response.status}`);
-      }
-
-      const data = await response.json();
-
-      if (data.session_active) {
-        setProjectId(data.project_id);
-        router.push({
-          pathname: `/(tabs)/project-description`,
-        });
-      }
-    } catch (e) {
-      console.error(e);
-      setError("Something went wrong. Please try again.");
-    }
-  }
-
-  useEffect(() => {
-    checkSession();
-  }, []);
 
   // Use /enter-code endpoint to verify student project code and redirect to project page
   async function enterCode() {
@@ -86,81 +58,29 @@ export default function HomeScreen() {
 
   return (
     // organize and structure student mobile landing page with text input for project code (TextInput)
-    <View style={[styles.homeContainer]}>
-      <Text style={styles.header}>Citizen Science App</Text>
-      <Text style={styles.text1}>Student Project Code:</Text>
-      {error && <Text style={styles.error}>{error}</Text>}
+    <View style={[globalStyles.homeContainer]}>
+      <Text style={globalStyles.header}>Citizen Science App</Text>
+
+      <Text style={globalStyles.subHead}>Project Code</Text>
+      {error && <Text style={globalStyles.error}>{error}</Text>}
+
       <TextInput
-        style={styles.input}
+        style={globalStyles.input}
         onChangeText={onChangeProjectCode}
         value={projectCode}
-        placeholder="Enter Student Project Code Here!"
+        placeholder="Enter Code Here!"
         keyboardType="default"
       />
-      <Button
-        onPress={enterCode}
-        title="Submit"
-        color="#a368eb"
-      />
+
+      <TouchableOpacity style={globalStyles.button} onPress={enterCode}>
+      <Text style={globalStyles.buttonText}>Submit</Text>
+      </TouchableOpacity>
+
       <Image
-        style={styles.image}
+        style={globalStyles.image}
         source={require("@/assets/images/science-image.webp")}
       />
+
     </View>
   );
 }
-
-// Style student landing page elements with StyleSheet import
-const styles = StyleSheet.create({
-  error: {
-    color: "red",
-  },
-  homeContainer: {
-    backgroundColor: "#dcd5be",
-    minHeight: "100%",
-    alignItems: "center",
-    display: "flex",
-    gap: 20,
-  },
-  header: {
-    backgroundColor: "#a368eb",
-    fontSize: 40,
-    color: "#ffffff",
-    textAlign: "center",
-    width: "100%",
-  },
-  title: {
-    fontSize: 32,
-    marginTop: 24,
-    marginBottom: 10,
-    textAlign: "center",
-  },
-  main: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    paddingTop: 10,
-    fontSize: 30,
-    gap: 10,
-  },
-  input: {
-    height: 30,
-    margin: 5,
-    borderWidth: 1,
-    padding: 0,
-    maxWidth: 250,
-    width: "100%",
-    backgroundColor: "#ffffff",
-    textAlign: "center",
-  },
-  image: {
-    width: "100%",
-    minWidth: 0,
-    maxWidth: 250,
-    maxHeight: 250,
-    marginTop: 20
-  },
-  text1: {
-    fontWeight: "bold",
-  },
-});

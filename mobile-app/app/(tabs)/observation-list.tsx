@@ -1,13 +1,17 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, ScrollView } from "react-native";
 import { useEffect, useState } from "react";
 import { DataTable } from "react-native-paper";
 import { useProject } from "../ProjectContext";
 import { API_URL } from "@/constants/api";
 
+import globalStyles from "../styles/globalStyles";
+
 type ObservationValue = {
-    observation_value_id: number;
-    field: number;
-    value: string;
+  observation_value_id: number;
+  value: string;
+  form_field: {
+    field_title: string;
+  } | null;
 };
 
 type Observation = {
@@ -50,77 +54,45 @@ export default function ObservationList() {
   useEffect(() => {getObservations()}, []);
 
   return (
-    <View style={[styles.homeContainer]}>
-      <Text style={styles.header}>Citizen Science App</Text>
-      <Text style={styles.text1}>{title && title}</Text>
-      <DataTable>
-        <DataTable.Header>
-          <DataTable.Title>Observation ID</DataTable.Title>
-          <DataTable.Title>Created At</DataTable.Title>
-          <DataTable.Title>Details</DataTable.Title>
-        </DataTable.Header>
-        {observations && observations.map((observation: Observation) => (
-            <DataTable.Row key={observation.observation_id}>
-                <DataTable.Cell>{observation.observation_id}</DataTable.Cell>
-                <DataTable.Cell>
-                    {new Date(observation.created_at).toLocaleString()}
-                </DataTable.Cell>
-                <DataTable.Cell>
-                    {observation.observation_values
-                    .map((value) => `${value.value}`)
-                    .join(", ")}
-                </DataTable.Cell>
-            </DataTable.Row>
-        ))}
-      </DataTable>
-    </View>
-  );
-}
 
-// Style student project description page elements with StyleSheet import
-const styles = StyleSheet.create({
-  error: {
-    color: "red",
-  },
-  homeContainer: {
-    backgroundColor: "#dcd5be",
-    minHeight: "100%",
-    //alignItems: "center",
-    gap: 10,
-  },
-  header: {
-    backgroundColor: "#a368eb",
-    fontSize: 40,
-    color: "#ffffff",
-    textAlign: "center",
-    width: "100%",
-  },
-  header2: {
-    fontSize: 25,
-    textAlign: "center",
-    width: "100%",
-  },
-  header3: {
-    fontSize: 25,
-    textAlign: "left",
-    padding: 10,
-  },
-  paragraph: {
-    fontSize: 14,
-    textAlign: "left",
-    width: "100%",
-    padding: 10,
-  },
-  main: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    paddingTop: 10,
-    fontSize: 30,
-    gap: 20,
-    maxWidth: 400,
-  },
-  text1: {
-    fontWeight: "bold",
-  },
-});
+    <View style={{ flex: 1 }}>
+      <View style={globalStyles.headerContainer}>
+        <Text style={globalStyles.header}>Citizen Science App</Text>
+      </View>
+
+      <ScrollView contentContainerStyle={globalStyles.scrollContainer}>
+        <Text style={[globalStyles.title, { marginLeft: 20 }]}>{title}</Text>
+        <View style={globalStyles.listContainer}>
+          {observations.map((observation) => (
+            <View key={observation.observation_id} style={globalStyles.card}>
+              <Text style={globalStyles.cardHeader}>
+                Observation ID: {observation.observation_id}
+              </Text>
+              <Text style={globalStyles.cardText}>
+                Created At: {new Date(observation.created_at).toLocaleString()}
+              </Text>
+
+              <View style={{ marginTop: 10 }}>
+                <Text style={globalStyles.cardHeader}>Details:</Text>
+                {observation.observation_values.map((value) => (
+                  <View key={value.observation_value_id} style={{ marginBottom: 8 }}>
+                    <Text style={globalStyles.cardText}>
+                      <Text style={{ fontWeight: "bold" }}>
+                        {value.form_field?.field_title || "Unknown Field"}:{" "}
+                      </Text>
+                      {value.value}
+                    </Text>
+                  </View>
+                ))}
+              </View>
+              
+            </View>
+          ))}
+        </View>
+      </ScrollView>
+    </View>
+
+  );
+
+
+}
