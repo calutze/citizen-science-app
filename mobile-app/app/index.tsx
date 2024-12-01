@@ -12,6 +12,38 @@ export default function HomeScreen() {
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
+  async function checkSession() {
+    try {
+      const response = await fetch(
+        `${API_URL}/check-session`,
+        {
+          credentials: "include",
+          method: "GET",
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`Response status: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      if (data.session_active) {
+        setProjectId(data.project_id);
+        router.push({
+          pathname: `/(tabs)/project-description`,
+        });
+      }
+    } catch (e) {
+      console.error(e);
+      setError("Something went wrong. Please try again.");
+    }
+  }
+
+  useEffect(() => {
+    checkSession();
+  }, []);
+
   // Use /enter-code endpoint to verify student project code and redirect to project page
   async function enterCode() {
     try {
