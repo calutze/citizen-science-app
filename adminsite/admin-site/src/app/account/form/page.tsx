@@ -172,7 +172,6 @@ export default function Page() {
         throw new Error(`Response status: ${response.status}`);
       }
       else {
-        const data = await response.json();
         console.log('Form submitted successfully');
         router.push('/account')
       }
