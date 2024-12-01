@@ -4,6 +4,8 @@ import { useRouter } from "expo-router";
 import { useProject } from "./ProjectContext";
 import { API_URL } from "../constants/api";
 
+import { TouchableOpacity } from "react-native";
+
 // Create a HomeScreen component for student mobile landing page
 export default function HomeScreen() {
   // Hooks for student code input, projectID, errors, and router
@@ -56,24 +58,27 @@ export default function HomeScreen() {
     // organize and structure student mobile landing page with text input for project code (TextInput)
     <View style={[styles.homeContainer]}>
       <Text style={styles.header}>Citizen Science App</Text>
-      <Text style={styles.text1}>Student Project Code:</Text>
+
+      <Text style={styles.subHead}>Project Code</Text>
       {error && <Text style={styles.error}>{error}</Text>}
+
       <TextInput
         style={styles.input}
         onChangeText={onChangeProjectCode}
         value={projectCode}
-        placeholder="Enter Student Project Code Here!"
+        placeholder="Enter Code Here!"
         keyboardType="default"
       />
-      <Button
-        onPress={enterCode}
-        title="Submit"
-        color="#a368eb"
-      />
+
+      <TouchableOpacity style={styles.button} onPress={enterCode}>
+      <Text style={styles.buttonText}>Submit</Text>
+      </TouchableOpacity>
+
       <Image
         style={styles.image}
         source={require("@/assets/images/science-image.webp")}
       />
+
     </View>
   );
 }
@@ -81,14 +86,16 @@ export default function HomeScreen() {
 // Style student landing page elements with StyleSheet import
 const styles = StyleSheet.create({
   error: {
-    color: "red",
+    color: "#993323",
+    fontSize: 18,
+    fontWeight: "bold",
   },
   homeContainer: {
     backgroundColor: "#dcd5be",
     minHeight: "100%",
     alignItems: "center",
     display: "flex",
-    gap: 20,
+    gap: 12,
   },
   header: {
     backgroundColor: "#a368eb",
@@ -96,12 +103,15 @@ const styles = StyleSheet.create({
     color: "#ffffff",
     textAlign: "center",
     width: "100%",
+    padding: 10,
+    paddingBottom: 12,
   },
   title: {
     fontSize: 32,
     marginTop: 24,
     marginBottom: 10,
     textAlign: "center",
+
   },
   main: {
     display: "flex",
@@ -111,24 +121,41 @@ const styles = StyleSheet.create({
     fontSize: 30,
     gap: 10,
   },
+  subHead: {
+    fontWeight: "bold",
+    fontSize: 24,
+    marginTop: 20,
+  },
   input: {
-    height: 30,
-    margin: 5,
+    height: 50,
+    margin: 10,
     borderWidth: 1,
-    padding: 0,
-    maxWidth: 250,
+    borderRadius: 5,
+    padding: 10,
+    maxWidth: 300,
     width: "100%",
     backgroundColor: "#ffffff",
     textAlign: "center",
+    fontSize: 18,
   },
   image: {
+    position: "absolute",
+    bottom: 0,
     width: "100%",
-    minWidth: 0,
-    maxWidth: 250,
-    maxHeight: 250,
-    marginTop: 20
+    height: 400,
+    resizeMode: "cover",
   },
-  text1: {
-    fontWeight: "bold",
+  button: {
+    backgroundColor: "#a368eb",
+    paddingVertical: 14, 
+    paddingHorizontal: 26,
+    borderRadius: 8,
+    marginTop: 10,
+  },
+  buttonText: {
+    color: "#ffffff",
+    fontSize: 22, 
+    fontWeight: "500", 
+    textAlign: "center",
   },
 });
