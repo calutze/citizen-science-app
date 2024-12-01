@@ -76,15 +76,11 @@ export default function Project() {
                     throw new Error(`Response status: ${formResponse.status}}`)
                 }
             } else {
-                // displays form
-                const form_data = await formResponse.json()
             }
         } catch (error: any) {
             console.error(error.message)
         }
     }
-
-    //TODO: once this call is fixed uncomment call in useEffect currently commented for linter
 
     async function getObservations() {
         // make header
@@ -154,6 +150,37 @@ export default function Project() {
         }
     }
 
+    function downloadCSV_helper() {
+        if (observations) {
+            downloadCSV(observations)
+        }
+    }
+
+    function downloadCSV(observations: any) {
+        // convert to CSV
+        let csv_content = "Observation ID, Details\n"
+
+        const observation_csv = observations.map((observation: any) => {
+            const ob_id = observation["observation_id"]
+            const ob_values = observation["observation_values"].map((value: any) => `${value.value}`).join(" ")
+            return ob_id + ', ' + ob_values
+        }).join('\n')
+        csv_content += observation_csv
+        console.log(csv_content)
+
+        // download file
+        const csv_file = new Blob([csv_content], { type: 'text/csv'});
+
+        const url = URL.createObjectURL(csv_file);
+
+        const download = document.createElement('a');
+
+        download.href = url;
+        download.download = 'download.csv';
+
+        download.click();
+    }
+
     return (
         chosen_project ? (
             <div className="projectDetails">
@@ -176,6 +203,8 @@ export default function Project() {
                         query: {project_id: Number(chosen_project)}
                         }}>
                     <button className="projectButton">Edit Project</button></Link>
+
+                    <button className="projectButton" onClick={downloadCSV_helper}>Observation CSV file</button>
 
                     <button id="deleteProject" className="projectButton" onClick={deleteConfirm}>Delete Project</button>
                 </div>
