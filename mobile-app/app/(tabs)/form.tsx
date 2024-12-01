@@ -1,10 +1,9 @@
-import { View, StyleSheet, Text } from "react-native";
-import DynamicForm from "@/components/DynamicForm";
 import { useEffect, useState } from "react";
+import { View, Text } from "react-native";
 import { router } from "expo-router";
+import DynamicForm from "@/components/DynamicForm";
 import { useProject } from "../ProjectContext";
 import { API_URL } from "@/constants/api";
-
 import globalStyles from "../styles/globalStyles";
 
 export default function FormScreen() {

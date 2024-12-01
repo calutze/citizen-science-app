@@ -1,9 +1,8 @@
-import { StyleSheet, Text, View, ScrollView } from "react-native";
-import { useEffect, useState } from "react";
-import { DataTable } from "react-native-paper";
+import { useState, useCallback } from "react";
+import { Text, View, ScrollView } from "react-native";
+import { useFocusEffect } from '@react-navigation/native';
 import { useProject } from "../ProjectContext";
 import { API_URL } from "@/constants/api";
-
 import globalStyles from "../styles/globalStyles";
 
 type ObservationValue = {
@@ -20,7 +19,7 @@ type Observation = {
     observation_values: ObservationValue[];
 };
 
-// Create a Observation List component for student mobile project description page
+// Create an ObservationList component that lists the observation made for a project
 export default function ObservationList() {
   const { projectId } = useProject();
   const [observations, setObservations] = useState<Observation[]>([]);
@@ -51,10 +50,15 @@ export default function ObservationList() {
       console.error("Error:", error.message);
     }
   }
-  useEffect(() => {getObservations()}, []);
+
+  // Get observations on every page load
+  useFocusEffect(
+    useCallback(() => {
+      getObservations();
+    }, [])
+  );
 
   return (
-
     <View style={{ flex: 1 }}>
       <View style={globalStyles.headerContainer}>
         <Text style={globalStyles.header}>Citizen Science App</Text>

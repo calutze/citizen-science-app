@@ -1,9 +1,9 @@
-import { useRouter } from "expo-router";
 import { useEffect } from "react";
+import { useRouter } from "expo-router";
 import { useProject } from "../ProjectContext";
 import { API_URL } from "@/constants/api";
 
-// Create a Project Description component for student mobile project description page
+// Call the clean-session endpoint to end the session and return to the index page
 export default function Logout() {
   const router = useRouter();
   const { setProjectId } = useProject();
