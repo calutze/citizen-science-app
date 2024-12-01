@@ -40,18 +40,31 @@ class FormTemplate(db.Model):
         lazy=True
         )
 
+    project = db.relationship(
+        'Project',
+        backref=db.backref('form_template', uselist=False)
+    )
+
     def get_id(self):
         """ Gets form id. """
         return self.form_id
 
-    def to_dict(self):
+    def to_dict(self, include_inactive=False):
         """ Converts form template and related fields to dictionary format. """
+
+        # filters out inactive fields
+        fields = [
+            field.to_dict()
+            for field in self.form_fields
+            if include_inactive or field.is_active
+        ]
+
         return {
             'form_id': self.form_id,
             'created_at': self.created_at.isoformat() if self.created_at else None,
             'description': self.description,
             'created_by': self.created_by,
-            'fields': [field.to_dict() for field in self.form_fields]
+            'fields': fields
         }
 
 
@@ -78,6 +91,7 @@ class FormField(db.Model):
     field_options = db.Column(db.JSON)  # for multiple options (ie. drop down)
     field_order = db.Column(db.Integer)
     is_required = db.Column(db.Boolean)
+    is_active = db.Column(db.Boolean, default=True)
     form = db.Column(
         db.Integer,
         db.ForeignKey('form_templates.form_id', ondelete='CASCADE'),
@@ -99,5 +113,6 @@ class FormField(db.Model):
             'field_options': self.field_options,
             'field_order': self.field_order,
             'is_required': self.is_required,
+            'is_active': self.is_active,
             'form': self.form
         }
