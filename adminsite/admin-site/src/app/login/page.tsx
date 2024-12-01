@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { API_URL } from '@/constants/api';
 
 export default function Page() {
     // this component is the user login page
@@ -23,7 +24,7 @@ export default function Page() {
         const loginHeader = new Headers();
         loginHeader.append("Content-Type", "application/json");
 
-        const loginRequest = new Request("https://capstone-deploy-production.up.railway.app/auth/login", {
+        const loginRequest = new Request(`${API_URL}/auth/login`, {
             method: "POST",
             credentials: "include",
             body: JSON.stringify(userData),

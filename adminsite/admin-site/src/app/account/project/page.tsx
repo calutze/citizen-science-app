@@ -4,7 +4,7 @@ import { useSearchParams, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import DisplayObservations from '../ui/display_observations_component';
-
+import { API_URL } from '@/constants/api';
 
 export default function Project() {
     const searchParams = useSearchParams()
@@ -20,7 +20,7 @@ export default function Project() {
         const projectHeader = new Headers();
         projectHeader.append("Content-Type", "application/json");
 
-        const projectRequest = new Request('https://capstone-deploy-production.up.railway.app/project/' + chosen_project,{
+        const projectRequest = new Request(`${API_URL}/project/` + chosen_project,{
             method: "GET",
             credentials: "include",
             headers: projectHeader
@@ -60,7 +60,7 @@ export default function Project() {
         formHeader.append("Content-Type", "application/json");
 
         // create request
-        const formRequest = new Request('https://capstone-deploy-production.up.railway.app/form/' + chosen_project,{
+        const formRequest = new Request(`${API_URL}/form/` + chosen_project,{
             method: "GET",
             credentials: "include",
             headers: formHeader
@@ -92,7 +92,7 @@ export default function Project() {
         observationHeader.append("Content-Type", "application/json");
 
         // create request
-        const observationRequest = new Request('https://capstone-deploy-production.up.railway.app/show-observations/' + chosen_project,{
+        const observationRequest = new Request(`${API_URL}/show-observations/` + chosen_project,{
             method: "GET",
             credentials: "include",
             headers: observationHeader
@@ -125,7 +125,7 @@ export default function Project() {
         deleteHeader.append("Content-Type", "application/json");
 
         //create the request
-        const deleteRequest = new Request('https://capstone-deploy-production.up.railway.app/delete-project/' + chosen_project, {
+        const deleteRequest = new Request(`${API_URL}/delete-project/` + chosen_project, {
             method: "DELETE",
             credentials: "include",
             headers: deleteHeader

@@ -2,6 +2,7 @@ import { StyleSheet, Text } from "react-native";
 import { View } from "react-native";
 import { useEffect, useState } from "react";
 import { useProject } from "../ProjectContext";
+import { API_URL } from "@/constants/api";
 
 // Create a Project Description component for student mobile project description page
 export default function ProjectDescription() {
@@ -10,10 +11,10 @@ export default function ProjectDescription() {
   const { projectId } = useProject();
   const [project, setProject] = useState<any | null>(null);
 
-  async function getProject(id: string | null) {
+  async function getProject(id: number | null) {
     try {
       const response = await fetch(
-        `https://capstone-deploy-production.up.railway.app/project/${id}`,
+        `${API_URL}/project/${id}`,
         {
           credentials: "include",
           method: "GET",
@@ -42,7 +43,6 @@ export default function ProjectDescription() {
   return (
     <View style={[styles.homeContainer]}>
       <Text style={styles.header}>Citizen Science App</Text>
-      <Text style={styles.header2}>Project Description Page</Text>
       {error && <Text style={styles.error}>{error}</Text>}
       <Text style={styles.text1}>Project Title:</Text>
       <Text>{project && project.title}</Text>
@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
   homeContainer: {
     backgroundColor: "#dcd5be",
     minHeight: "100%",
-    alignItems: "center",
+    //alignItems: "center",
     gap: 10,
   },
   header: {
@@ -76,6 +76,17 @@ const styles = StyleSheet.create({
     fontSize: 25,
     textAlign: "center",
     width: "100%",
+  },
+  header3: {
+    fontSize: 25,
+    textAlign: "left",
+    padding: 10,
+  },
+  paragraph: {
+    fontSize: 14,
+    textAlign: "left",
+    width: "100%",
+    padding: 10,
   },
   main: {
     display: "flex",

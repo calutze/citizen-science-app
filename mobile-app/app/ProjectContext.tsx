@@ -1,9 +1,10 @@
+import { API_URL } from "@/constants/api";
 import { router } from "expo-router";
 import React, { createContext, useContext, useEffect, useState } from "react";
 
 interface ProjectContextProps {
-  projectId: string | null;
-  setProjectId: (id: string) => void;
+  projectId: number | null;
+  setProjectId: (id: number) => void;
   error: string | null;
 }
 
@@ -18,14 +19,14 @@ interface ProjectProviderProps {
 export const ProjectProvider: React.FC<ProjectProviderProps> = ({
   children,
 }) => {
-  const [projectId, setProjectId] = useState<string | null>(null);
+  const [projectId, setProjectId] = useState<number | null>(null);
 
   const [error, setError] = useState<string | null>(null);
 
   async function checkSession() {
     try {
       const response = await fetch(
-        `https://capstone-deploy-production.up.railway.app/check-session`,
+        `${API_URL}/check-session`,
         {
           credentials: "include",
           method: "GET",
@@ -40,9 +41,13 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
 
       if (data.session_active) {
         setProjectId(data.project_id);
-        router.push({
+        console.log(projectId)
+        /*router.push({
           pathname: `/(tabs)/project-description`,
-        });
+        });*/
+      } else {
+        setProjectId(-1);
+        console.log(projectId)
       }
     } catch (e) {
       console.error(e);

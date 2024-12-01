@@ -3,8 +3,8 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-
 import ChartComponent from './ui/chart_component';
+import { API_URL } from '@/constants/api';
 
 
 export default function Page() {
@@ -50,7 +50,7 @@ export default function Page() {
         const listHeader = new Headers();
         listHeader.append("Content-Type", "application/json");
 
-        const listRequest = new Request('https://capstone-deploy-production.up.railway.app/user-projects', {
+        const listRequest = new Request(`${API_URL}/user-projects`, {
             method: "GET",
             credentials: "include",
             headers: listHeader

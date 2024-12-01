@@ -1,10 +1,10 @@
 'use client';
 
 import { useEffect, useState } from "react";
-import { useSearchParams } from 'next/navigation'
+import { useSearchParams, useRouter } from 'next/navigation'
 import { Trash2, Plus, MoveUp, MoveDown } from 'lucide-react';
 import "./styles.css";
-import { get } from "http";
+import { API_URL } from '@/constants/api';
 
 // Type definition for FormField, matches backend Model
 interface FormField {
@@ -31,9 +31,10 @@ interface FormTemplate {
 export default function Page() {
   const [formFields, setFormFields] = useState<FormField[]>([]);
   const [formTitle, setFormTitle] = useState('');
+  const router = useRouter()
   const searchParams = useSearchParams();
   const selected_project = Number(searchParams.get('project_id'));
-  const existing_form = Boolean(searchParams.get('edit'));
+  const isExistingForm: Boolean = (searchParams.get('edit') === 'true');
 
   const fieldTypes = [
     'text',
@@ -42,16 +43,14 @@ export default function Page() {
     'checkbox',
   ]
   
-  //TODO: Check if existing form for this project id exists
-    //If existing form then route to edit form page
-    //If no existing form then route to create form page
+  //Check if existing form for this project id exists
   async function getForm() {
     // make header
     const formHeader = new Headers();
     formHeader.append("Content-Type", "application/json");
 
     // create request
-    const formRequest = new Request('https://capstone-deploy-production.up.railway.app/form/' + selected_project,{
+    const formRequest = new Request(`${API_URL}/form/` + selected_project,{
         method: "GET",
         credentials: "include",
         headers: formHeader
@@ -61,10 +60,15 @@ export default function Page() {
     try {
         const formResponse = await fetch(formRequest)
         if (!formResponse.ok) {
+          if (formResponse.status === 404) {
+            console.log('No form found for this project')
+          } else {
             throw new Error(`Response status: ${formResponse.status}}`)
+          }
         } else {
-            // displays form
-            const form_data = await formResponse.json()
+            // load form data into FormFields for display
+            const form_data = await formResponse.json();
+            form_data.fields.sort((a: FormField, b: FormField) => a.field_order - b.field_order);
             setFormFields(form_data.fields)
         }
     } catch (error: any) {
@@ -72,7 +76,9 @@ export default function Page() {
     }
   }
 
-  useEffect(() => {getForm()}, []);
+  if (isExistingForm) {
+    useEffect(() => {getForm()}, []);
+  }
 
   // Add a new field to the form builder
   function addField() {
@@ -107,13 +113,16 @@ export default function Page() {
   const moveField = (index: number, direction: 'up' | 'down') => {
     if ((direction === 'up' && index === 0) || 
           (direction === 'down' && index === formFields.length -1)) 
-       return;
-
+       return
     const newFields = [...formFields];
     const newIndex = direction === 'up' ? index - 1 : index + 1;
-    const movingField = newFields[index];
-    newFields[index] = newFields[newIndex];
-    newFields[newIndex] = movingField;
+
+    // Swap the two fields
+    [newFields[index], newFields[newIndex]] = [newFields[newIndex], newFields[index]];
+
+    // Update the field_order properties
+    newFields[index].field_order = index;
+    newFields[newIndex].field_order = newIndex;
     setFormFields(newFields);
   };
 
@@ -130,19 +139,27 @@ export default function Page() {
 
     const edit_form = {
       description: formTitle,
-      fields: formFields
+      fields: formFields.map(({ field_id, field_description, field_options, field_order, field_title, field_type, is_required }) => ({
+        field_id,
+        field_description,
+        field_options,
+        field_order,
+        field_title,
+        field_type,
+        is_required
+      }))
     }
 
     let formRequest: Request;
-    if (existing_form) {
-      formRequest = new Request(`https://capstone-deploy-production.up.railway.app/update-form/${selected_project}`, {
+    if (isExistingForm) {
+      formRequest = new Request(`${API_URL}/update-form/${selected_project}`, {
         method: 'PUT',
         credentials: 'include',
         headers: formHeader,
         body: JSON.stringify(edit_form, null, 2)
     })
     } else {
-      formRequest = new Request("https://capstone-deploy-production.up.railway.app/add-form", {
+      formRequest = new Request(`${API_URL}/add-form`, {
         method: 'POST',
         credentials: 'include',
         headers: formHeader,
@@ -157,7 +174,7 @@ export default function Page() {
       else {
         const data = await response.json();
         console.log('Form submitted successfully');
-        console.log(data);
+        router.push('/account')
       }
     }
     catch (error: any) {
@@ -228,7 +245,7 @@ export default function Page() {
               onChange={(e) => updateField(index, 'is_required', e.target.checked)}/>
           </div>
           {/*Options for Select, Radio, Checkbox, only displays if those types*/}
-          {(field.field_type === 'select' || field.field_type === 'radio' || field.field_type === 'checkbox') && (
+          {(field.field_type === 'select' || field.field_type === 'radio') && (
           <div>
             <label>Options (comma-separated)</label>
             <input 

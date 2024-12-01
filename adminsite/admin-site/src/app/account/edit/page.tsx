@@ -2,6 +2,7 @@
 
 import {useState } from 'react'
 import {useRouter, useSearchParams} from 'next/navigation'
+import { API_URL } from '@/constants/api';
 
 export default function Page() {
     const [projectData, setProjectData] = useState({
@@ -23,7 +24,7 @@ export default function Page() {
         const editProjectHeader = new Headers();
         editProjectHeader.append("Content-Type", "application/json");
 
-        const editProjectRequest = new Request("https://capstone-deploy-production.up.railway.app/update-project/" + chosen_project, {
+        const editProjectRequest = new Request(`${API_URL}/update-project/` + chosen_project, {
             method: "PUT",
             credentials: "include",
             body: JSON.stringify(projectData),
