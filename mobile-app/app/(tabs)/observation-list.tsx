@@ -16,11 +16,8 @@ type Observation = {
     observation_values: ObservationValue[];
 };
 
-interface DisplayObservationsProps {
-    observations: Observation[];
-}
-// Create a Project Description component for student mobile project description page
-export default function ProjectDescription() {
+// Create a Observation List component for student mobile project description page
+export default function ObservationList() {
   const { projectId } = useProject();
   const [observations, setObservations] = useState<Observation[]>([]);
   const [title, setTitle] = useState();
