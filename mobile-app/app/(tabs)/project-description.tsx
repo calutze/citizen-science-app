@@ -1,5 +1,4 @@
-import { StyleSheet, Text, ScrollView } from "react-native";
-import { View } from "react-native";
+import { StyleSheet, Text, ScrollView, View } from "react-native";
 import { useEffect, useState } from "react";
 import { useProject } from "../ProjectContext";
 import { API_URL } from "@/constants/api";

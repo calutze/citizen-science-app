@@ -1,8 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { View, ScrollView, StyleSheet, TextInput, Text, Alert, Button } from 'react-native';
+import { View, ScrollView, StyleSheet, TextInput, Text, Button } from 'react-native';
 import { Switch, Checkbox, RadioButton, Title, Surface } from 'react-native-paper';
 import { Picker } from '@react-native-picker/picker';
-import { routeToScreen } from 'expo-router/build/useScreens';
 
 import { KeyboardAvoidingView, Platform, TouchableOpacity } from 'react-native';
 
