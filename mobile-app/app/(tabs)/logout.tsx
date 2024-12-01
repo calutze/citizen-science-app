@@ -36,5 +36,5 @@ export default function Logout() {
   useEffect(() => {
     performLogout();
   }, []);
-  return null;
+  return
 }

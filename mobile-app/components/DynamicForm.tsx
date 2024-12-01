@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { View, ScrollView, StyleSheet, TextInput, Text } from 'react-native';
-import { Switch, Button, Checkbox, RadioButton, Title, Surface } from 'react-native-paper';
+import { View, ScrollView, StyleSheet, TextInput, Text, Alert, Button } from 'react-native';
+import { Switch, Checkbox, RadioButton, Title, Surface } from 'react-native-paper';
 import { Picker } from '@react-native-picker/picker';
 import { routeToScreen } from 'expo-router/build/useScreens';
 
@@ -29,7 +29,12 @@ interface DynamicFormProps {
 }
 
 const DynamicForm: React.FC<DynamicFormProps> = ({ formData , onSubmit }) => {
-  const [formValues, setFormValues] = useState<{ [key: string]: string | boolean | null }>({});
+  const [formValues, setFormValues] = useState<{ [key: string]: string | boolean | null }>(
+    formData.fields.reduce((acc, field) => {
+      acc[field.field_id] = field.field_type === 'checkbox' ? false : '';
+      return acc;
+    }, {} as { [key: string]: string | boolean | null })
+  );
   const submitRef = useRef(onSubmit);
 
   useEffect(() => {
@@ -57,8 +62,8 @@ const DynamicForm: React.FC<DynamicFormProps> = ({ formData , onSubmit }) => {
             <TextInput
               style={styles.textInput}
               onChangeText={(value) => handleChange(field_id, value)}
-              value={formValues[field_id] || ''}
-              placeholder={field_description || ''}
+              value={typeof formValues[field_id] === 'string' ? formValues[field_id] : ''}
+              placeholder={field_description}
               multiline={true}
             />
           </View>
@@ -91,7 +96,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({ formData , onSubmit }) => {
           <View style={styles.switchContainer} key={field_id}>
             <Text style={styles.label}>{field_title}</Text>
             <Switch
-              value={formValues[field_id] || false}
+              value={typeof formValues[field_id] === 'boolean' ? formValues[field_id] : false}
               onValueChange={(value) => handleChange(field_id, value)}
             />
           </View>
@@ -112,7 +117,10 @@ const DynamicForm: React.FC<DynamicFormProps> = ({ formData , onSubmit }) => {
         return (
           <View style={styles.radioButtonContainer} key={field_id}>
             <Text style={styles.label}>{field_title}</Text>
-            <RadioButton.Group onValueChange={newValue => handleChange(field_id, newValue)} value={formValues[field_id]}>
+            <RadioButton.Group 
+              onValueChange={newValue => handleChange(field_id, newValue)} 
+              value={typeof formValues[field_id] === 'string' ? formValues[field_id] : ''}
+            >
               {field_options && field_options.map(item => (
                 <View key={item}>
                   <Text style={styles.radioLabel}>{item}<RadioButton value={item} /></Text>
@@ -127,7 +135,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({ formData , onSubmit }) => {
     }
   };
 
-  const handleSubmit = () => {
+  function handleSubmit() {
     const submit_data = {
       project_id: formData.form_id,
       student_identifier: null,
@@ -147,12 +155,11 @@ const DynamicForm: React.FC<DynamicFormProps> = ({ formData , onSubmit }) => {
         {formData.fields.sort(
             (a, b) => a.field_order - b.field_order
           ).map(field => renderFormElement(field))}
-        
         <Button
-            style={styles.submitButton}
-            onPress={handleSubmit}>
-            <Text style={styles.submitButtonText}>Submit</Text>
-        </Button>
+            title="Submit"
+            color="#a368eb"
+            onPress={handleSubmit}
+        />
       </Surface>
     </ScrollView>
   );

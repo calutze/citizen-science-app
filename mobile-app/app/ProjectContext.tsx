@@ -41,9 +41,13 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
 
       if (data.session_active) {
         setProjectId(data.project_id);
-        router.push({
+        console.log(projectId)
+        /*router.push({
           pathname: `/(tabs)/project-description`,
-        });
+        });*/
+      } else {
+        setProjectId(-1);
+        console.log(projectId)
       }
     } catch (e) {
       console.error(e);
