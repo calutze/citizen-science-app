@@ -5,6 +5,8 @@ import { router } from "expo-router";
 import { useProject } from "../ProjectContext";
 import { API_URL } from "@/constants/api";
 
+import globalStyles from "../styles/globalStyles";
+
 export default function FormScreen() {
   const sampleFormData = {
     form_id: -1,
@@ -92,8 +94,8 @@ export default function FormScreen() {
   }
 
   return (
-    <View>
-      <Text style={styles.header}>Citizen Science App</Text>
+    <View style={globalStyles.homeContainer}>
+      <Text style={globalStyles.header}>Citizen Science App</Text>
       <DynamicForm
         formData={formData || sampleFormData}
         onSubmit={handleSubmit}
@@ -101,23 +103,3 @@ export default function FormScreen() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: "#dcd5be",
-    minHeight: "100%",
-    alignItems: "center",
-  },
-  header: {
-    backgroundColor: "#a368eb",
-    fontSize: 40,
-    color: "#ffffff",
-    textAlign: "center",
-    width: "100%",
-  },
-  header2: {
-    fontSize: 24,
-    marginBottom: 20,
-    textAlign: 'center',
-  },
-});
