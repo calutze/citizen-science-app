@@ -1,11 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { View, ScrollView, StyleSheet, TextInput, Text, Alert, Button } from 'react-native';
+import { View, ScrollView, TextInput, Text, 
+         KeyboardAvoidingView, Platform, TouchableOpacity } from 'react-native';
 import { Switch, Checkbox, RadioButton, Title, Surface } from 'react-native-paper';
 import { Picker } from '@react-native-picker/picker';
-import { routeToScreen } from 'expo-router/build/useScreens';
-
-import { KeyboardAvoidingView, Platform, TouchableOpacity } from 'react-native';
-
 import globalStyles from "../app/styles/globalStyles";
 
 interface FormField {
@@ -32,15 +29,17 @@ interface DynamicFormProps {
   onSubmit: (values: { [key: string]: any }) => void;
 }
 
-const DynamicForm: React.FC<DynamicFormProps> = ({ formData , onSubmit }) => {
+const DynamicForm: React.FC<DynamicFormProps> = ({ formData, onSubmit }) => {
   const [formValues, setFormValues] = useState<{ [key: string]: string | boolean | null }>(
     formData.fields.reduce((acc, field) => {
       acc[field.field_id] = field.field_type === 'checkbox' ? false : '';
       return acc;
     }, {} as { [key: string]: string | boolean | null })
   );
+  // Create a ref to store the current onSubmit function and pass to parent component
   const submitRef = useRef(onSubmit);
 
+  // Update the submitRef when the onSubmit prop changes
   useEffect(() => {
     submitRef.current = onSubmit;
   }, [onSubmit]);
@@ -56,7 +55,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({ formData , onSubmit }) => {
   // Render different form elements based on type
   const renderFormElement = (field: FormField) => {
     //descructure the field object
-    const { field_id, field_title, field_type, field_options, is_required, form, field_order, field_description } = field;  
+    const { field_id, field_title, field_type, field_options, field_description } = field;
 
     switch (field_type) {
       case 'text':
@@ -108,21 +107,21 @@ const DynamicForm: React.FC<DynamicFormProps> = ({ formData , onSubmit }) => {
 
       case 'checkbox':
         return (
-            <View style={globalStyles.checkboxContainer} key={field_id}>
-                <Checkbox.Item
-                    label={field_title}
-                    status={formValues[field_id] ? 'checked' : 'unchecked'}
-                    onPress={() => handleChange(field_id, !formValues[field_id])}
-                />
-            </View>
+          <View style={globalStyles.checkboxContainer} key={field_id}>
+            <Checkbox.Item
+              label={field_title}
+              status={formValues[field_id] ? 'checked' : 'unchecked'}
+              onPress={() => handleChange(field_id, !formValues[field_id])}
+            />
+          </View>
         );
 
       case 'radio':
         return (
           <View style={globalStyles.radioButtonContainer} key={field_id}>
             <Text style={globalStyles.label}>{field_title}</Text>
-            <RadioButton.Group 
-              onValueChange={newValue => handleChange(field_id, newValue)} 
+            <RadioButton.Group
+              onValueChange={newValue => handleChange(field_id, newValue)}
               value={typeof formValues[field_id] === 'string' ? formValues[field_id] : ''}
             >
               {field_options && field_options.map(item => (
@@ -164,17 +163,17 @@ const DynamicForm: React.FC<DynamicFormProps> = ({ formData , onSubmit }) => {
         <Surface style={globalStyles.container}>
           <Title style={globalStyles.observationTitle}>{formData.description}</Title>
           {formData.fields.sort(
-              (a, b) => a.field_order - b.field_order
-            ).map(field => renderFormElement(field))}
+            (a, b) => a.field_order - b.field_order
+          ).map(field => renderFormElement(field))}
 
-        <TouchableOpacity style={globalStyles.button} onPress={handleSubmit}>
-          <Text style={globalStyles.buttonText}>Submit</Text>
-        </TouchableOpacity>
-        
+          <TouchableOpacity style={globalStyles.button} onPress={handleSubmit}>
+            <Text style={globalStyles.buttonText}>Submit</Text>
+          </TouchableOpacity>
+
         </Surface>
       </ScrollView>
 
-  </KeyboardAvoidingView>
+    </KeyboardAvoidingView>
   );
 };
 

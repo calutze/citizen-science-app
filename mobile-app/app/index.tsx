@@ -1,11 +1,8 @@
-import { Image, StyleSheet, TextInput, Text, Button, View } from "react-native";
 import { useState, useEffect } from "react";
+import { Image, TextInput, Text, View, TouchableOpacity } from "react-native";
 import { useRouter } from "expo-router";
 import { useProject } from "./ProjectContext";
 import { API_URL } from "../constants/api";
-
-import { TouchableOpacity } from "react-native";
-
 import globalStyles from "./styles/globalStyles";
 
 // Create a HomeScreen component for student mobile landing page
@@ -16,7 +13,7 @@ export default function HomeScreen() {
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
-  // Use /enter-code endpoint to verify student project code and redirect to project page
+  // Use enter-code endpoint to verify student project code and redirect to project page
   async function enterCode() {
     try {
       setError(null);

@@ -1,6 +1,6 @@
-import { API_URL } from "@/constants/api";
-import { router } from "expo-router";
 import React, { createContext, useContext, useEffect, useState } from "react";
+import { router } from "expo-router";
+import { API_URL } from "@/constants/api";
 
 interface ProjectContextProps {
   projectId: number | null;
@@ -23,6 +23,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
 
   const [error, setError] = useState<string | null>(null);
 
+  // Check if a session is active and set the project id
   async function checkSession() {
     try {
       const response = await fetch(
@@ -39,15 +40,15 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
 
       const data = await response.json();
 
+      // If a session is active, set the project id and navigate to the project description page
       if (data.session_active) {
         setProjectId(data.project_id);
-        console.log(projectId)
-        /*router.push({
+        router.push({
           pathname: `/(tabs)/project-description`,
-        });*/
+        });
+        
       } else {
         setProjectId(-1);
-        console.log(projectId)
       }
     } catch (e) {
       console.error(e);

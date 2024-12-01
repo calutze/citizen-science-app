@@ -1,18 +1,16 @@
-import { StyleSheet, Text, ScrollView } from "react-native";
-import { View } from "react-native";
 import { useEffect, useState } from "react";
+import { Text, ScrollView, View } from "react-native";
 import { useProject } from "../ProjectContext";
 import { API_URL } from "@/constants/api";
-
 import globalStyles from "../styles/globalStyles";
 
 // Create a Project Description component for student mobile project description page
 export default function ProjectDescription() {
-  // useState Hook to manage student code input
   const [error, setError] = useState<string | null>(null);
   const { projectId } = useProject();
   const [project, setProject] = useState<any | null>(null);
 
+  // Fetch project data from the backend
   async function getProject(id: number | null) {
     try {
       const response = await fetch(
