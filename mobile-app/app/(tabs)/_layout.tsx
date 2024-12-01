@@ -32,6 +32,18 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
+        name="observation-list"
+        options={{
+          title: "Observations",
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon
+              name={focused ? "list" : "list-outline"}
+              color={color}
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
         name='form'
         options={{
           title: 'New Observation',
